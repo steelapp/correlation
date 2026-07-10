@@ -13,7 +13,8 @@ let lockedTargetId = 'algebra';
 
 // --- STATE MANAGEMENT ENGINE (SUB-PAGE RETIREMENT ANCHOR) ---
 // If coming back from another page, instantly skip splash screen, and trigger full animation from scratch
-if (localStorage.getItem('mstcWorkspaceActive') === 'true') {
+// CHANGED: Use sessionStorage instead of localStorage so it resets on a fresh site visit
+if (sessionStorage.getItem('mstcWorkspaceActive') === 'true') {
     if (splashScreen) {
         splashScreen.style.display = 'none';
         splashScreen.classList.add('fade-out');
@@ -86,7 +87,8 @@ if (menuContainer) {
 // --- CORE PANEL TRANSLATION ACTIONS ---
 if (startBtn) {
     startBtn.addEventListener('click', () => {
-        localStorage.setItem('mstcWorkspaceActive', 'true');
+        // CHANGED: Save to sessionStorage
+        sessionStorage.setItem('mstcWorkspaceActive', 'true');
 
         if (splashScreen) {
             splashScreen.classList.remove('instant-hide'); 
@@ -110,7 +112,8 @@ if (startBtn) {
 
 if (homeBtn) {
     homeBtn.addEventListener('click', () => {
-        localStorage.removeItem('mstcWorkspaceActive');
+        // CHANGED: Remove from sessionStorage
+        sessionStorage.removeItem('mstcWorkspaceActive');
 
         if (splashScreen) {
             splashScreen.style.display = 'flex';
