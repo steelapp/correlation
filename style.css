@@ -555,3 +555,16 @@ body {
     body { overflow-y: auto; }
 }
 
+/* This tells the phone to adjust based on screen width */
+@media only screen and (max-width: 600px) {
+  /* Change things here for mobile */
+  body {
+    padding: 10px;
+  }
+
+  /* Example: If you have a class called 'column', stack them */
+  .column {
+    width: 100% !important;
+    display: block;
+  }
+}
