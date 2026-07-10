@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 02: Plane & Spherical Trigonometry Active Recall Studio</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700;800&family=JetBrains+Mono:wght=600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+    <style>
+        /* SITE ARCHITECTURE PRESETS */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-y: auto !important; 
+            overflow-x: hidden !important;
+            height: auto !important;
+            min-height: 100vh;
+            color: #1e3a47;
+            background: linear-gradient(135deg, #f4f7f6 0%, #eef2f5 100%);
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            height: auto !important;
+            min-height: 100vh;
+            display: block; 
+        }
+
+        .main-content {
+            height: auto !important;
+            padding: 3rem 4rem; 
+        }
+
+        /* LIVE INSTANT FILTER BAR */
+        .search-container {
+            margin: 2rem 0 3rem 0;
+            max-width: 600px;
+        }
+
+        .matrix-search-bar {
+            width: 100%;
+            padding: 1.1rem 1.8rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(11, 79, 97, 0.2);
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            color: #0b4f61;
+            font-weight: 600;
+            outline: none;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .matrix-search-bar:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #008ca6;
+            box-shadow: 0 0 25px rgba(0, 140, 166, 0.2);
+        }
+
+        /* DUAL-VIEW LAYER ARCHITECTURE */
+        .view-panel {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        .view-panel.active-view {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* NATIVE VIEW CONTROL INTERFACE */
+        .hub-toggle-row {
+            display: inline-flex;
+            background: rgba(11, 79, 97, 0.08);
+            padding: 0.4rem;
+            border-radius: 16px;
+            margin: 1.5rem 0 0 0;
+            border: 1px solid rgba(11, 79, 97, 0.05);
+        }
+
+        .toggle-tab-btn {
+            background: transparent;
+            border: none;
+            color: #4a6b75;
+            padding: 0.75rem 1.6rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-tab-btn.active-tab {
+            background: #FFFFFF;
+            color: #0b4f61;
+            box-shadow: 0 4px 12px rgba(11, 79, 97, 0.1);
+        }
+
+        /* PREMIUM CENTERED CITATION BOX STYLING */
+        .sheet-courtesy-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: rgba(11, 79, 97, 0.05); 
+            border: 1px solid rgba(11, 79, 97, 0.12);
+            border-left: 4px solid #008ca6;
+            padding: 1.1rem 2rem;
+            border-radius: 12px;
+            margin: 1.5rem auto 2.5rem auto;
+            max-width: 800px;
+            box-shadow: 0 4px 20px rgba(11, 62, 77, 0.04);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .sheet-courtesy-text {
+            font-size: 0.98rem;
+            font-weight: 500;
+            color: #ffffff !important; 
+            letter-spacing: 0.01em;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .sheet-courtesy-text strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        /* 3D FLASHCARD GRID SYSTEM */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .flashcard {
+            background: transparent;
+            width: 100%;
+            height: 340px; 
+            perspective: 1200px; 
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: left;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; 
+            backface-visibility: hidden;
+            border-radius: 24px;
+            padding: 2rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .card-front {
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px -5px rgba(11, 62, 77, 0.05);
+        }
+
+        .flashcard:hover .card-front {
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 15px 35px rgba(11, 62, 77, 0.1);
+            border-color: rgba(0, 140, 166, 0.3);
+        }
+
+        .card-tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #008ca6;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            background: rgba(0, 140, 166, 0.08);
+            padding: 0.35rem 0.75rem;
+            border-radius: 30px;
+        }
+
+        .card-tag.spherical-tag {
+            color: #e28743;
+            background: rgba(226, 135, 67, 0.1);
+        }
+
+        .card-front h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0b4f61;
+            margin: auto 0; 
+            line-height: 1.35;
+        }
+
+        .click-hint {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #7ba3af;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-back {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 20px 40px -10px rgba(11, 62, 77, 0.12);
+            transform: rotateY(180deg); 
+            border-left: 6px solid #008ca6; 
+            overflow-y: auto;
+        }
+
+        .flashcard[data-keywords*="spherical"] .card-back {
+            border-left-color: #e28743;
+        }
+
+        .card-back h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0b4f61;
+            margin: 0 0 0.75rem 0;
+        }
+
+        .math-block {
+            background: #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: #38bdf8; 
+            padding: 0.9rem;
+            border-radius: 14px;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.01em;
+            line-height: 1.4;
+        }
+
+        .card-notes {
+            font-size: 0.9rem;
+            color: #4a6b75;
+            line-height: 1.5;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .card-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.4rem 0 0 0;
+            font-size: 0.85rem;
+        }
+
+        .card-list li {
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .card-list li::before {
+            content: "• ";
+            color: #008ca6;
+            font-weight: bold;
+        }
+        
+        .flashcard[data-keywords*="spherical"] .card-list li::before {
+            color: #e28743;
+        }
+
+        .matrix-section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0b4f61;
+            margin: 3.5rem 0 1.5rem 0;
+            letter-spacing: -0.02em;
+            border-bottom: 2px dashed rgba(11, 79, 97, 0.15);
+            padding-bottom: 0.5rem;
+        }
+
+        .module-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            color: #008ca6;
+            background: rgba(0, 140, 166, 0.1);
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* NATIVE CANVAS WORKSPACE CONTAINER STYLES */
+        #pdf-seamless-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem; 
+            margin-top: 1rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .pdf-page-canvas {
+            max-width: 100%;
+            height: auto !important;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 
+                0 20px 40px -15px rgba(11, 62, 77, 0.15),
+                inset 0 0 40px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .pdf-page-canvas:hover {
+            transform: translateY(-4px);
+        }
+
+        .loading-indicator {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0b4f61;
+            padding: 4rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <main class="main-content">
+            
+            <header class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+                <div>
+                    <span class="module-badge">LESSON 02</span>
+                    <h1 style="margin: 0.5rem 0 0.5rem 0; font-size: 2.5rem; font-weight: 800; color: #0b4f61;">Plane & Spherical Trigonometry</h1>
+                    <p style="margin: 0; color: #4a6b75;">Fluently navigate active recall data or complete notes right inside your workspace layout.</p>
+                    
+                    <div class="hub-toggle-row">
+                        <button id="tabCards" class="toggle-tab-btn active-tab" onclick="switchView('panelCards', 'tabCards')">
+                            🗂️ Active Recall Flashcards
+                        </button>
+                        <button id="tabSheet" class="toggle-tab-btn" onclick="switchView('panelSheet', 'tabSheet')">
+                            📄 Formulae & Notes
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="window.location.href='index.html'" class="header-home-btn" style="margin:0;">
+                        ⬅️ Back
+                    </button>
+                </div>
+            </header>
+
+             <div class="slide-glow bg-algebra" style="opacity: 0.15; pointer-events: none; fixed: true;"></div>
+
+            <div id="panelCards" class="view-panel active-view">
+
+                <h2 class="matrix-section-title">📐 Plane Trigonometry</h2>
+                <div class="flashcard-grid">
+                    
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry angle measurements conventions direction sign counter clockwise clockwise">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Angle Measurements Sign Conventions</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Angular Sign Conventions</h4>
+                                <div class="math-block">Counter-Clockwise (CCW) &rarr; (+)<br>Clockwise (CW) &rarr; (-)</div>
+                                <p class="card-notes">Standard reference system for track parameters across geometric planes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry angle measurements units revolution degrees radians gradians mils circular sexagesimal centesimal military">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>1 Revolution Equivalent Units</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Angular Systems Calibration</h4>
+                                <div class="math-block">360° = 2π rad = 400 grad = 6400 mils</div>
+                                <p class="card-notes"><b>System Definitions:</b></p>
+                                <ul class="card-list">
+                                    <li><b>360°</b>: Sexagesimal System</li>
+                                    <li><b>2π rad</b>: Circular System</li>
+                                    <li><b>400 grad</b>: Centesimal System</li>
+                                    <li><b>6400 mils</b>: Military System</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry angle classifications explementary conjugate reflection bounds">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Special Angle Classifications</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Geometric Boundaries</h4>
+                                <div class="math-block">Explementary / Conjugate Sum = 360°<br>Reflection Angle: 180° &lt; θ &lt; 360°</div>
+                                <p class="card-notes">Identifies relational characteristics between complementary structural elements across system planes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry pythagorean identities quotient reciprocal sine cosine tangent">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Pythagorean Relations</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Pythagorean & Quotient Identities</h4>
+                                <div class="math-block">sin²θ + cos²θ = 1<br>1 + tan²θ = sec²θ<br>1 + cot²θ = csc²θ</div>
+                                <p class="card-notes"><b>Quotient Relations:</b></p>
+                                <ul class="card-list">
+                                    <li><code>tan θ = sin θ / cos θ</code></li>
+                                    <li><code>cot θ = cos θ / sin θ</code></li>
+                                    <li>Crucial for algebraic reductions in calculus integrations.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry co-function identities complement sine cosine tangent cotangent">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Co-Function Identities</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Cofunction Identities</h4>
+                                <div class="math-block">sin(90° - θ) = cos θ<br>cos(90° - θ) = sin θ<br>tan(90° - θ) = cot θ</div>
+                                <p class="card-notes">Establishes coordinate tracking transforms between reciprocal function waves.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry sum difference identities compound angle phase tracking">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Sum & Difference 2 Angle Laws</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Sum & Difference of 2 Angle Laws</h4>
+                                <div class="math-block">sin(A ± B) = sinAcosB ± cosAsinB<br>cos(A ± B) = cosAcosB ∓ sinAsinB</div>
+                                <div class="math-block">tan(A ± B) = (tanA ± tanB) / (1 ∓ tanAtanB)</div>
+                                <p class="card-notes">Note the inverted operators inside the denominator of the cosine and tangent expressions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry double angle half angle identities sine cosine tangent">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Double & Half-Angle Identities</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Double & Half-Angle Identities</h4>
+                                <div class="math-block">sin(2A) = 2sinAcosA<br>cos(2A) = cos²A - sin²A = 1 - 2sin²A</div>
+                                <p class="card-notes"><b>Alternative Multipliers & Half-Angles:</b></p>
+                                <ul class="card-list">
+                                    <li><code>tan 2A = 2tanA / (1 - tan²A)</code></li>
+                                    <li><code>sin(A/2) = ±√[(1 - cos A)/2]</code></li>
+                                    <li><code>cos(A/2) = ±√[(1 + cos A)/2]</code></li>
+                                    <li><code>tan(A/2) = ±√[(1 - cos A)/(1 + cos A)]</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry sine cosine law oblique triangles obtuse acute ambiguous ssa">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Oblique Triangle Governing Laws</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Sine & Cosine Law</h4>
+                                <p class="card-notes"><b>Sine Law:</b></p>
+                                <div class="math-block">a/sinA = b/sinB = c/sinC</div>
+                                <p class="card-notes"><b>Cosine Law:</b></p>
+                                <div class="math-block">c² = a² + b² - 2ab·cosC</div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry area triangle heron semiperimeter geometric sas sss">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Area of Triagle</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Area of Triangle</h4>
+                                <p class="card-notes"><b>Given 2 sides and included angle:</b></p>
+                                <div class="math-block">Area = ½ ab·sinC</div>
+                                <p class="card-notes"><b>Heron's Formula:</b></p>
+                                <div class="math-block">Area = √[s(s-a)(s-b)(s-c)]</div>
+                                <p class="card-notes">s = (a + b + c) / 2 </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry triangle medians centroid lines geometry vectors">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Triangle Medians (Centroid)</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Median Segment Resolutions</h4>
+                                <div class="math-block">m<sub>a= ½√(2b² + 2c² - a²)</div>
+                                <div class="math-block">m<sub>b= ½√(2a² + 2c² - b²)</div>
+                                <div class="math-block">m<sub>c= ½√(2a² + 2b² - c²)</div>
+                                <p class="card-notes">Medians intersect cleanly at the triangle's <b>Centroid</b> balance vertex.</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane trigonometry graphs period amplitude frequency phase shift sine cosine tangent">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Trig</span>
+                                <h3>Sinusoidal Wave Formulas</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Sinusoidal Wave Formulas</h4>
+                                <div class="math-block"> y = A &middot; sin(Bx - C) + D<br> y = A &middot; cos(Bx - C) + D</div>
+                                <p class="card-list" >
+                
+                                • <strong>Amplitude:</strong> |A| <br>
+                
+                                • <strong>Period (T):</strong> T = 2&pi; / B <br>
+                
+                                • <strong>Frequency (f):</strong> f = B / 2&pi; &nbsp;or&nbsp; f = 1 / T <br>
+                
+                                • <strong>Phase Shift:</strong> -C / B <br>
+                
+                                • <strong>Vertical Shift:</strong> D <br>
+                
+        
+                
+                
+                             </p>
+                              </div>
+                                  </div>
+                                        </div>
+
+                </div>
+
+                <h2 class="matrix-section-title">🌐 Spherical Trigonometry</h2>
+                <div class="flashcard-grid">
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="spherical trigonometry excess area radius sphere interior angle 180 540 degrees defect properties bounds">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag spherical-tag">Spherical Trig</span>
+                                <h3>Spherical Excess, Defect & Bounds</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Excess Metric & Fundamental Bounds</h4>
+                                <div class="math-block">E = A + B + C - 180°<br>D = 360° - (a + b + c)</div>
+                                <p class="card-notes"><b>Core Rules for Sides and Angles:</b></p>
+                                <ul class="card-list">
+                                    <li>The total interior angle sum must conform to: <code>180° &lt; A+B+C &lt; 540°</code>.</li>
+                                    <li>The sum of all three angular sides is less than <code>360°</code>.</li>
+                                    <li>The sum of any two sides is greater than the third side. Greater side sits opposite greater angle.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="spherical trigonometry right triangle napier circular part opposite sin co cos">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag spherical-tag">Spherical Trig</span>
+                                <h3>Napier's Rules: Sin-Co-Op</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>The "Sin-Co-Op" Rule</h4>
+                                <div class="math-block">sin(Middle) = cos(Opp₁) × cos(Opp₂)</div>
+                                <p class="card-notes"><b>Definition:</b> The sine of any middle part is equal to the product of the <b>cosines</b> of its two <b>opposite</b> geometric parts.</p>
+                                <ul class="card-list">
+                                    <li>Circular layout order: <code>a</code>, <code>b</code>, <code>co-A</code>, <code>co-c</code>, <code>co-B</code>.</li>
+                                    <li>The suffix "co-" means complement (e.g., <code>90° - Part</code>).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="spherical trigonometry right triangle napier circular part adjacent sin ta tan">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag spherical-tag">Spherical Trig</span>
+                                <h3>Napier's Rules: Sin-Ta-Ad</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>The "Sin-Ta-Ad" Rule</h4>
+                                <div class="math-block">sin(Middle) = tan(Adj₁) × tan(Adj₂)</div>
+                                <p class="card-notes"><b>Definition:</b> The sine of any middle part is equal to the product of the <b>tangents</b> of its two <b>adjacent</b> geometric parts.</p>
+                                <ul class="card-list">
+                                    <li>Parts are considered adjacent if they lie immediately next to the selected middle element in the 5-part loop.</li>
+                                    <li>Omit right angle <code>C</code> entirely from the cycle setup.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="spherical trigonometry right triangle napier circular parts diagram illustration circle wheel construction mapping layout rules">
+    <div class="card-inner">
+        <div class="card-front">
+            <span class="card-tag spherical-tag">Spherical Trig</span>
+            <h3>Napier's Circle</h3>
+            <span class="click-hint">🔄 Click to Flip</span>
+        </div>
+        
+        <div class="card-back" style="padding: 0; background: #ffffff; overflow: hidden; display: flex; align-items: center; justify-content: center; border-left: 6px solid #e28743;">
+            <svg viewBox="0 0 400 340" style="width: 100%; height: 100%; display: block;" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="light-blueprint-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(15, 23, 42, 0.03)" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#light-blueprint-grid)" />
+
+                <g transform="translate(10, 0)">
+                    <path d="M 35 250 L 125 250 L 125 90 Z" fill="rgba(226, 135, 67, 0.03)" stroke="#e28743" stroke-width="2.5" stroke-linejoin="round"/>
+                    
+                    <path d="M 113 250 L 113 238 L 125 238" fill="none" stroke="#e28743" stroke-width="1.5"/>
+                    
+                    <text x="15" y="255" fill="#047857" font-family="'Inter', sans-serif" font-size="15px" font-weight="800" text-anchor="middle">A</text>
+                    <text x="125" y="75" fill="#047857" font-family="'Inter', sans-serif" font-size="15px" font-weight="800" text-anchor="middle">B</text>
+                    <text x="142" y="255" fill="#0f172a" font-family="'Inter', sans-serif" font-size="12px" font-weight="600" text-anchor="start">C = 90°</text>
+                    
+                    <text x="80" y="272" fill="#0369a1" font-family="'JetBrains Mono', monospace" font-size="16px" font-weight="700" text-anchor="middle">b</text>
+                    <text x="142" y="175" fill="#0369a1" font-family="'JetBrains Mono', monospace" font-size="16px" font-weight="700" text-anchor="start">a</text>
+                    <text x="65" y="160" fill="#0369a1" font-family="'JetBrains Mono', monospace" font-size="16px" font-weight="700" text-anchor="end">c</text>
+                </g>
+
+                <g>
+                    <line x1="165" y1="170" x2="215" y2="170" stroke="#475569" stroke-width="2.5" stroke-dasharray="4 3"/>
+                    <polygon points="213,165 223,170 213,175" fill="#475569"/>
+                    <text x="190" y="152" fill="rgba(15, 23, 42, 0.5)" font-family="'Inter', sans-serif" font-size="10px" font-weight="800" letter-spacing="0.1em" text-anchor="middle">MAP TO WHEEL</text>
+                    <text x="190" y="193" fill="#b91c1c" font-family="'Inter', sans-serif" font-size="10px" font-weight="700" letter-spacing="0.05em" text-anchor="middle">OMIT C (90°)</text>
+                </g>
+
+                <g transform="translate(10, 0)">
+                    <circle cx="310" cy="170" r="75" fill="none" stroke="#e28743" stroke-width="3"/>
+                    <circle cx="310" cy="170" r="5" fill="#0f172a"/>
+
+                    <line x1="310" y1="170" x2="310" y2="245" stroke="#e28743" stroke-width="2"/>
+                    <line x1="310" y1="170" x2="235" y2="170" stroke="#e28743" stroke-width="2"/>
+                    <line x1="310" y1="170" x2="385" y2="170" stroke="#e28743" stroke-width="2"/>
+                    <line x1="310" y1="170" x2="272.5" y2="105" stroke="#e28743" stroke-width="2"/>
+                    <line x1="310" y1="170" x2="347.5" y2="105" stroke="#e28743" stroke-width="2"/>
+
+                    <text x="272" y="215" fill="#0369a1" font-family="'JetBrains Mono', monospace" font-size="18px" font-weight="800" text-anchor="middle" dominant-baseline="central">a</text>
+                    <text x="348" y="215" fill="#0369a1" font-family="'JetBrains Mono', monospace" font-size="18px" font-weight="800" text-anchor="middle" dominant-baseline="central">b</text>
+                    
+                    <text x="358" y="142" fill="#047857" font-family="'JetBrains Mono', monospace" font-size="14px" font-weight="800" text-anchor="middle" dominant-baseline="central">co-A</text>
+                    <text x="310" y="122" fill="#0f172a" font-family="'JetBrains Mono', monospace" font-size="14px" font-weight="800" text-anchor="middle" dominant-baseline="central">co-c</text>
+                    <text x="262" y="142" fill="#047857" font-family="'JetBrains Mono', monospace" font-size="14px" font-weight="800" text-anchor="middle" dominant-baseline="central">co-B</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+</div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="spherical trigonometry oblique law sines cosines sides geodesic arcs">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag spherical-tag">Spherical Trig</span>
+                                <h3>Oblique Spherical Laws: Sines & Cosines</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Sines and Cosines</h4>
+                                <div class="math-block">sin a/sinA = sin b/sinB = sin c/sinC</div>
+                                <div class="math-block">cosa = cosb cosc + sinb sinc cosA</div>
+                                <p class="card-notes"><b>Key Properties:</b></p>
+                                <ul class="card-list">
+                                    <li>The law of cosines shown above is targeted directly at computing unknown <b>sides</b>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="spherical trigonometry law cosines angles interior vectors vertex bearing">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag spherical-tag">Spherical Trig</span>
+                                <h3>Spherical Law of Cosines for Angles</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Interior Angular Core Framework</h4>
+                                <div class="math-block">cos A = -cos B cos C + sin B sin C cos a</div>
+                                <p class="card-notes"><b>Critical Operator Notice:</b></p>
+                                <ul class="card-list">
+                                    <li>Pay close attention to the **negative sign** (<code>-</code>) attached directly to the primary <code>cos B cos C</code> compound element.</li>
+                                    <li>This formula allows calculation of vertex bearings across a spherical earth model.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="spherical trigonometry surface area volume triangle metrics projections">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag spherical-tag">Spherical Trig</span>
+                                <h3>Spherical Triangle Area & Volume</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Surface Spatial Projections</h4>
+                                <div class="math-block">Area = (π · R² · E) / 180°</div>
+                                <p class="card-notes"><b>Volume Transform Configuration:</b></p>
+                                <div class="math-block">Volume = (π · R³ · E) / 540°</div>
+                        
+                                <p class="card-notes">Requires Spherical Excess <code>E</code> value calculated explicitly in degree units.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+                </div>
+            </div>
+
+            <div id="panelSheet" class="view-panel">
+                <div class="sheet-courtesy-box">
+                    <div class="sheet-courtesy-text">
+                        The notes presented in this document are courtesy of <strong>Engr. Neil Jon P. Lotivio</strong>.
+                    </div>
+                </div>
+                
+                <div id="pdf-seamless-container">
+                    <div class="loading-indicator">Compiling Native Trigonometry Workspace...</div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Fluent single-page viewport toggle routing
+        function switchView(panelId, tabId) {
+            const panels = document.getElementsByClassName('view-panel');
+            for(let i = 0; i < panels.length; i++) {
+                panels[i].classList.remove('active-view');
+            }
+            
+            const tabs = document.getElementsByClassName('toggle-tab-btn');
+            for(let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active-tab');
+            }
+            
+            document.getElementById(panelId).classList.add('active-view');
+            document.getElementById(tabId).classList.add('active-tab');
+        }
+
+        // Toggles 3D flip animation states cleanly
+        function toggleFlip(cardElement) {
+            cardElement.classList.toggle('flipped');
+        }
+
+        // High-speed keyword text index matching filter algorithm
+        function filterFlashcards() {
+            const query = document.getElementById('matrixSearch').value.toLowerCase().trim();
+            const cards = document.getElementsByClassName('flashcard');
+
+            for (let i = 0; i < cards.length; i++) {
+                const keywords = cards[i].getAttribute('data-keywords') || "";
+                if (query === "" || keywords.includes(query)) {
+                    cards[i].style.display = "block";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // --- SEAMLESS PDF.JS CANVAS RENDERING ENGINE ---
+        const pdfUrl = 'pdfs/trigonometry.pdf';
+        // Configure PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        // Fetch and process document layer sequentially
+        pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+            const container = document.getElementById('pdf-seamless-container');
+            container.innerHTML = ''; // Evaporate initial loader indicator state
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(page => {
+                    
+                    // Spawn custom HTML5 Canvas element
+                    const canvas = document.createElement('canvas');
+                    canvas.className = 'pdf-page-canvas';
+                    
+                    container.appendChild(canvas);
+
+                    const context = canvas.getContext('2d');
+                    
+                    // High-density scaling layer for sharp mathematical glyph rendering
+                    const viewport = page.getViewport({ scale: 2.0 }); 
+                    
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            }
+        }).catch(error => {
+            console.error('Error rendering seamless workspace document matrix:', error);
+            document.getElementById('pdf-seamless-container').innerHTML = 
+                `<div class="loading-indicator" style="color: #ef4444;">Failed to build document workspace layout. Please check file placement structure parameters.</div>`;
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 01: Algebra Active Recall Studio & Reference Hub</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+    <style>
+        /* SITE ARCHITECTURE PRESETS */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-y: auto !important; 
+            overflow-x: hidden !important;
+            height: auto !important;
+            min-height: 100vh;
+            color: #1e3a47;
+            background: linear-gradient(135deg, #f4f7f6 0%, #eef2f5 100%);
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            height: auto !important;
+            min-height: 100vh;
+            display: block; 
+        }
+
+        .main-content {
+            height: auto !important;
+            padding: 3rem 4rem; 
+        }
+
+        /* LIVE INSTANT FILTER BAR */
+        .search-container {
+            margin: 2rem 0 3rem 0;
+            max-width: 600px;
+        }
+
+        .matrix-search-bar {
+            width: 100%;
+            padding: 1.1rem 1.8rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(11, 79, 97, 0.2);
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            color: #0b4f61;
+            font-weight: 600;
+            outline: none;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .matrix-search-bar:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #008ca6;
+            box-shadow: 0 0 25px rgba(0, 140, 166, 0.2);
+        }
+
+        /* DUAL-VIEW LAYER ARCHITECTURE */
+        .view-panel {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        .view-panel.active-view {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* NATIVE VIEW CONTROL INTERFACE */
+        .hub-toggle-row {
+            display: inline-flex;
+            background: rgba(11, 79, 97, 0.08);
+            padding: 0.4rem;
+            border-radius: 16px;
+            margin: 1.5rem 0 0 0;
+            border: 1px solid rgba(11, 79, 97, 0.05);
+        }
+
+        .toggle-tab-btn {
+            background: transparent;
+            border: none;
+            color: #4a6b75;
+            padding: 0.75rem 1.6rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-tab-btn.active-tab {
+            background: #FFFFFF;
+            color: #0b4f61;
+            box-shadow: 0 4px 12px rgba(11, 79, 97, 0.1);
+        }
+
+        /* PREMIUM CENTERED CITATION BOX STYLING */
+        .sheet-courtesy-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: rgba(11, 79, 97, 0.05); 
+            border: 1px solid rgba(11, 79, 97, 0.12);
+            border-left: 4px solid #008ca6;
+            padding: 1.1rem 2rem;
+            border-radius: 12px;
+            margin: 1.5rem auto 2.5rem auto;
+            max-width: 800px;
+            box-shadow: 0 4px 20px rgba(11, 62, 77, 0.04);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .sheet-courtesy-text {
+            font-size: 0.98rem;
+            font-weight: 500;
+            color: #ffffff !important; 
+            letter-spacing: 0.01em;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .sheet-courtesy-text strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        /* 3D FLASHCARD GRID SYSTEM */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .flashcard {
+            background: transparent;
+            width: 100%;
+            height: 320px; 
+            perspective: 1200px; 
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: left;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; 
+            backface-visibility: hidden;
+            border-radius: 24px;
+            padding: 2rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .card-front {
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px -5px rgba(11, 62, 77, 0.05);
+        }
+
+        .flashcard:hover .card-front {
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 15px 35px rgba(11, 62, 77, 0.1);
+            border-color: rgba(0, 140, 166, 0.3);
+        }
+
+        .card-tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #008ca6;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            background: rgba(0, 140, 166, 0.08);
+            padding: 0.35rem 0.75rem;
+            border-radius: 30px;
+        }
+
+        .card-front h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0b4f61;
+            margin: auto 0; 
+            line-height: 1.35;
+        }
+
+        .click-hint {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #7ba3af;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-back {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 20px 40px -10px rgba(11, 62, 77, 0.12);
+            transform: rotateY(180deg); 
+            border-left: 6px solid #008ca6; 
+            overflow-y: auto;
+        }
+
+        .card-back h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0b4f61;
+            margin: 0 0 0.75rem 0;
+        }
+
+        .math-block {
+            background: #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #38bdf8; 
+            padding: 0.9rem;
+            border-radius: 14px;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.01em;
+            line-height: 1.4;
+        }
+
+        .card-notes {
+            font-size: 0.9rem;
+            color: #4a6b75;
+            line-height: 1.5;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .card-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.4rem 0 0 0;
+            font-size: 0.85rem;
+        }
+
+        .card-list li {
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .card-list li::before {
+            content: "• ";
+            color: #008ca6;
+            font-weight: bold;
+        }
+
+        .matrix-section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0b4f61;
+            margin: 3.5rem 0 1.5rem 0;
+            letter-spacing: -0.02em;
+            border-bottom: 2px dashed rgba(11, 79, 97, 0.15);
+            padding-bottom: 0.5rem;
+        }
+
+        /* NATIVE CANVAS WORKSPACE CONTAINER STYLES */
+        #pdf-seamless-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem; 
+            margin-top: 1rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .pdf-page-canvas {
+            max-width: 100%;
+            height: auto !important;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 
+                0 20px 40px -15px rgba(11, 62, 77, 0.15),
+                inset 0 0 40px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .pdf-page-canvas:hover {
+            transform: translateY(-4px);
+        }
+
+        .loading-indicator {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0b4f61;
+            padding: 4rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <main class="main-content">
+            
+            <header class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+                <div>
+                    <span class="module-badge">LESSON 01</span>
+                    <h1 style="margin: 0.5rem 0 0.5rem 0;">Algebra</h1>
+                    <p style="margin: 0; color: #4a6b75;">Fluently navigate active recall data or complete notes right inside your workspace layout.</p>
+                    
+                    <div class="hub-toggle-row">
+                        <button id="tabCards" class="toggle-tab-btn active-tab" onclick="switchView('panelCards', 'tabCards')">
+                            🗂️ Active Recall Flashcards
+                        </button>
+                        <button id="tabSheet" class="toggle-tab-btn" onclick="switchView('panelSheet', 'tabSheet')">
+                            📄 Formulae & Notes
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="window.location.href='index.html'" class="header-home-btn" style="margin:0;">
+                        ⬅️ Back
+                    </button>
+                </div>
+            </header>
+
+            <div class="slide-glow bg-algebra" style="opacity: 0.15; pointer-events: none; fixed: true;"></div>
+
+            <div id="panelCards" class="view-panel active-view">
+                
+                <h2 class="matrix-section-title">✨ Basic Math and Other Formulae</h2>
+                <div class="flashcard-grid">
+                    
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="quadratic equation discriminant roots sum product basic math">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Basic Math</span>
+                                <h3>Quadratic Equation</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Quadratic Equation</h4>
+                                <div class="math-block">x = [-B ± √(B² - 4AC)] / 2A</div>
+                                <p class="card-notes"><b>Discriminant (B² - 4AC):</b></p>
+                                <ul class="card-list">
+                                    <li><b>= 0</b>: Roots are real & equal</li>
+                                    <li><b>&gt; 0</b>: Roots are real & unequal</li>
+                                    <li><b>&lt; 0</b>: Roots are imaginary</li>
+                                </ul>
+                                <p class="card-notes" style="margin-top:0.4rem;"><b>Properties:</b> Sum = <code>-B/A</code> | Product = <code>C/A</code></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="binomial theorem constant term coefficients exponents summation expansion">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Basic Math</span>
+                                <h3>Binomial Theorem</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Binomial Theorem</h4>
+                                <div class="math-block">rᵗʰ Term = nCm · aⁿ⁻ᵐ · bᵐ</div>
+                                <p class="card-notes">Where <b>m = r - 1</b> and <b>nCm = n! / [(n-m)!m!]</b></p>
+                                <ul class="card-list">
+                                    <li><b>Sum of Coefficients:</b> S = f(1) - f(0)</li>
+                                    <li><b>Sum of Exponents:</b> Sₑ = (n/2)(n + 1)(j + k)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="laws exponents power rule product quotient algebra">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Basic Math</span>
+                                <h3>Laws of Exponents</h3>
+                                 <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Laws of Exponents</h4>
+                                <p class="card-notes" style="font-size: 0.75rem; line-height: 1.35;">
+                                    • 1. (a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup><br>
+                                    • 2. a<sup>m</sup> &times; a<sup>n</sup> = a<sup>m+n</sup><br>
+                                    • 3. a<sup>m</sup> / a<sup>n</sup> = a<sup>m-n</sup><br>
+                                    • 4. a<sup>-n</sup> = 1 / a<sup>n</sup><br>
+                                    • 5. (a &times; b)<sup>m</sup> = a<sup>m</sup> &times; b<sup>m</sup><br>
+                                    • 6. (a/b)<sup>m</sup> = a<sup>m</sup> / b<sup>m</sup><br>
+                                </p>
+                                <p class="card-notes" style="font-size:0.75rem; border-top:1px dashed #ccc; padding-top:4px; margin:0;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="properties logarithm rules change base characteristic mantissa natural log">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Basic Math</span>
+                                <h3>Properties of Logarithms</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Properties of Logarithms</h4>
+                                <p class="card-notes" style="font-size: 0.75rem; line-height: 1.35;">
+                                    • 1. If log<sub>b</sub> x = y, then x = b<sup>y</sup><br>
+                                    • 2. log<sub>b</sub> xy = log<sub>b</sub> x + log<sub>b</sub> y<br>
+                                    • 3. log<sub>b</sub> (x/y) = log<sub>b</sub> x - log<sub>b</sub> y<br>
+                                    • 4. log<sub>b</sub> x<sup>y</sup> = y log<sub>b</sub> x<br>
+                                    • 5. log<sub>b</sub> b = 1<br>
+                                    • 6. log<sub>b</sub> 1 = 0<br>
+                                </p>
+                                <p class="card-notes" style="font-size:0.75rem; border-top:1px dashed #ccc; padding-top:4px; margin:0;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="partial fractions case algebraic components decomposition">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Basic Math</span>
+                                <h3>Partial Fractions</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Partial Fractions</h4>
+                                <ul class="card-list" style="font-size:0.8rem;">
+                                    <li><b>Case 1:</b><br><code>A/(x+1) + B/(x+4)</code></li><br>
+                                    <li><b>Case 2:</b><br><code>A/(x+1) + (Bx+C)/(x²+4)</code></li><br>
+                                    <li><b>Case 3:</b><br><code>A/(x+1) + B/(x+4) + C/(x+4)²</code></li><br>
+                                </ul>
+                                <p class="card-notes" style="font-size:0.75rem; border-top:1px dashed #ccc; padding-top:4px; margin:0;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="properties radicals roots fractional exponents basic math index power simplify algebra">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Basic Math</span>
+                                <h3>Properties of Radicals</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Properties of Radicals</h4>
+                                <ul class="card-list" style="font-size:0.78rem; line-height:1.4;">
+                                    <li><b>Product Rule:</b> <code>ⁿ√(ab) = ⁿ√a · ⁿ√b</code></li>
+                                    <li><b>Quotient Rule:</b> <code>ⁿ√(a/b) = ⁿ√a / ⁿ√b</code></li>
+                                    <li><b>Root of a Root:</b> <code>ᵐ√(ⁿ√a) = ᵐⁿ√a</code></li>
+                                    <li><b>Power of a Root:</b> <code>(ⁿ√a)ⁿ = a</code> (for <code>a ≥ 0</code>)</li>
+                                </ul>
+                                 <p class="card-notes" style="font-size:0.75rem; border-top:1px dashed #ccc; padding-top:4px; margin:0;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <h2 class="matrix-section-title">🏃‍♂️ Application, Word Problems I and II</h2>
+                <div class="flashcard-grid">
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="age problems present past future timeline constant difference">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Word Problem</span>
+                                <h3>Age Problems</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Age Problems</h4>
+                                <ul class="card-list">
+                                    <li>If the current age is x, then n times the age is nx.</li>
+                                    <li>If the current age is x, then the age n years later = x + n</li>
+                                    <li>If the current age is x, then age n years ago = x – n</li>
+                                    <li>The ages in a ratio a:b will be ax and bx</li>
+                                    <li>If the current age is x, then 1/n of the age is x/n.</li>
+                                </ul>
+                                <p class="card-notes" style="margin-top:0.4rem; font-weight:700;">x = present, x + n = n years later, x - n = n years ago </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="motion problems velocity displacement time current upstream downstream circuit">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Word Problem</span>
+                                <h3>Motion Problems</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Motion Problems</h4>
+                                <div class="math-block">v = d/t | t = d/v | d = v · t</div>
+                                <p class="card-list"><b>Water/Air Current:</b><br>
+                                    • x + y = velocity when going downstream / with the wind<br>
+                                    • x - y = velocity when going upstream / against the wind<br><br>
+                                <p class="card-list"><b>Closed Circuit Tracking:</b><br>
+                                    • d<sub>f</sub> - d<sub>s</sub> = 1 circuit &rarr; same direction<br>
+                                    • d<sub>f</sub> - d<sub>s</sub> = 1 circuit &rarr; opposite direction<br>
+                                    • d<sub>f</sub> = d<sub>s</sub> &rarr; overtaking of faster<br>
+                                </p>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="work problems rates combined jobs time man days uniform">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Word Problem</span>
+                                <h3>Work Problems</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Work Problems</h4>
+            <p class="card-notes" style="font-size: 0.75rem; line-height: 1.35;">
+                <strong>Case 1: Each worker has different rates</strong><br>
+                • rate = job done / time<br>
+                • combined rates = rate 1 &plusmn; rate 2<br><br>
+                
+                <strong>Different rates, staggered:</strong><br>
+                • 1 = (1/A)x + (1/B)y<br>
+                &nbsp;&nbsp;- A and B are their solo total times<br>
+                &nbsp;&nbsp;- x and y are the actual hours/days they spent working.<br><br>
+                <strong>Different rates, synchronous:</strong><br>
+                • 1/T = 1/t<sub>1</sub> + 1/t<sub>2</sub><br><br>
+                
+                <strong>Case 2: Each worker has the same rate</strong><br>
+                • job done = (number of men)(number of days)<br>
+                • WT = W<sub>1</sub>T<sub>1</sub> + W<sub>2</sub>T<sub>2</sub> + W<sub>n</sub>T<sub>n</sub><br>
+                • combined rates = rate 1 &plusmn; rate 2<br>
+            </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="clock problems digit units tens hundreds hand movement degree minutes reversed">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Word Problem</span>
+                                <h3>Clock Problems</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Clock Problems</h4>
+                                <p class="card-notes"><b>Clock Tracking Rules:</b><br>
+                                     Minute hand distance = <code>x</code><br> Hour hand distance = <code>x / 12</code></p>
+                                <ul class="card-list" style="font-size:0.8rem; columns:2;">
+                                    <li>1 hr = 30°</li>
+                                    <li>12 hr = 360°</li>
+                                    <li>60 min = 360°</li>
+                                    <li>1 min = 6°</li>
+                                </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="mixture problems volume concentration equations components fluid">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Word Problem</span>
+                                <h3>Digits Problems</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Digits Problems</h4>
+                               <div class="math-block">100h+10t+u</div>
+                                </p>
+                                <div class="math-block">Reversed: 100u+10t+h</div>
+                                </p>
+                                 <p class="card-notes" style="font-size:0.75rem; border-top:1px dashed #ccc; padding-top:4px; margin:0;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="mixture problems volume concentration equations components fluid">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Word Problem</span>
+                                <h3>Mixture Problems</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Conservation of Volume & Concentration</h4>
+                                <div class="math-block">V<sub>A</sub> + V<sub>B</sub> = V </div>
+                                </p>
+                                <div class="math-block">V<sub>A</sub> C<sub>A</sub> + V<sub>B</sub> C<sub>B</sub> = VC</div>
+                                <ul class="card-list">
+                                    • V = volume <br>
+                                    • C = concentration<br>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="mixture problems volume concentration equations components fluid">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Word Problem</span>
+                                <h3>Remainder Theorem</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Remainder Theorem</h4>
+                                <ul class="card-list">
+                                <li>If g(x) = ax + b (linear), remainder is constant (c)</li> 
+                                <li>If g(x) = ax<sup>2</sup> + bx + c (quadaratic), remainder is ax + b (linear)</li> 
+                                <li>If g(x) = ax<sup>3</sup> + bx<sup>2</sup> + cx + d (cubic), remainder is ax<sup>2</sup> + bx + c (quadaratic)</li>                 
+                                </ul>                      
+                                <p class="card-notes" style="font-size:0.75rem; border-top:1px dashed #ccc; padding-top:4px; margin:0;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="mixture problems volume concentration equations components fluid">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Word Problem</span>
+                                <h3>Variation</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Variation</h4>
+                                <ul class="card-list">
+                                <li>Direct: x ∝ y, x = ky</li> 
+                                <li>Inverse: x ∝ 1/y, x = k/y</li> 
+                                <li>Joint: Direct: x ∝ y, x = ky</li>                 
+                                </ul>                      
+                                <p class="card-notes" style="font-size:0.75rem; border-top:1px dashed #ccc; padding-top:4px; margin:0;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <h2 class="matrix-section-title">📊 Series, Sequences, and Fundamental Principles of Counting</h2>
+                <div class="flashcard-grid">
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="series sequences arithmetic geometric harmonic progression finite infinite sum terms">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Series and Sequences</span>
+                                <h3>Arithmetic Series</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Arithmetic Series</h4>
+                                <div class="math-block">n<sup>th</sup> Term: a<sub>n</sub> = a<sub>1</sub> + (n - 1)d</div>
+                                <div class="math-block">Sum: S<sub>n</sub> = (n / 2)(a<sub>1</sub> + a<sub>n</sub>)</div>
+                                <ul class="card-list">
+                                    <li>Harmonic Progressions = reciprocal of arithmetic</li>
+                                    
+                                </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="series sequences arithmetic geometric harmonic progression finite infinite sum terms">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Series and Sequences</span>
+                                <h3>Geometric Series</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Geometric Series</h4>
+                                <div class="math-block">n<sup>th</sup> Term: a<sub>n</sub> = a<sub>1</sub> r<sup>n-1</div>
+                                <ul class="card-list">
+                                    <li>r &gt; 1 (finite): S<sub>n</sub> = [a<sub>1</sub>(1 - r<sup>n</sup>)] / (1 - r)</li>
+                                    <li>r &lt; 1 (infinite): S<sub>n</sub> = a<sub>1</sub> / (1 - r)</li> 
+                                </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="means arithmetic geometric harmonic relationship am gm hm">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Fundamental Principles of Counting</span>
+                                <h3>Permutation</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Permutation</h4>
+                                <ul class="card-list" style="font-size:0.8rem;">
+                                    <div class="math-block"><sub>n</sub>P<sub>r</sub> = n! / (n - r)!</div><br>
+                                    <li>Theorem 1: n different objects taken r at a time</li><br>
+                                    <div class="math-block">P = n! / (n<sub>1</sub>! &middot; n<sub>2</sub>! &middot; n<sub>3</sub>!... )</div><br>
+                                    <li>Theorem 2: n objects taken all at a time in which n1 of the objects are alike, n2 are alike, n3 are alike, and so on</li>
+                                    
+                                </ul>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="means arithmetic geometric harmonic relationship am gm hm">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Fundamental Principles of Counting</span>
+                                <h3>Combination</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Combination</h4>
+                                    <div class="math-block"><sub>n</sub>C<sub>r</sub> = n! / [r!(n - r)!]</div><br>
+                                     <ul class="card-list">
+                                    <li>Theorem 4: n objects taken r at a time</li>
+                                    
+                                </ul>
+                            
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="permutations combinations cells cyclic alike counting principles objects theorem">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Fundamental Principles of Counting</span>
+                                <h3>Probability</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Probability</h4>
+                                <div class="math-block">P + Q = 1</div>
+                                <ul class="card-list">
+                                    <li> P = probability to happen </li>
+                                    <li> Q = probability to fail </li>
+                   
+                                </ul>
+                                    
+                         
+                            </div>
+                        </div>
+                    </div>
+
+                   
+
+                </div>
+            </div>
+
+            <div id="panelSheet" class="view-panel">
+                <div class="sheet-courtesy-box">
+                    <div class="sheet-courtesy-text">
+                        The notes presented in this document are courtesy of <strong>Engr. Neil Jon P. Lotivio</strong>.
+                    </div>
+                </div>
+                
+                <div id="pdf-seamless-container">
+                    <div class="loading-indicator">Compiling Native Algebra Workspace...</div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Fluent single-page viewport toggle routing
+        function switchView(panelId, tabId) {
+            const panels = document.getElementsByClassName('view-panel');
+            for(let i = 0; i < panels.length; i++) {
+                panels[i].classList.remove('active-view');
+            }
+            
+            const tabs = document.getElementsByClassName('toggle-tab-btn');
+            for(let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active-tab');
+            }
+            
+            document.getElementById(panelId).classList.add('active-view');
+            document.getElementById(tabId).classList.add('active-tab');
+        }
+
+        // Toggles 3D flip animation states cleanly
+        function toggleFlip(cardElement) {
+            cardElement.classList.toggle('flipped');
+        }
+
+        // High-speed keyword text index matching filter algorithm
+        function filterFlashcards() {
+            const query = document.getElementById('matrixSearch').value.toLowerCase().trim();
+            const cards = document.getElementsByClassName('flashcard');
+
+            for (let i = 0; i < cards.length; i++) {
+                const keywords = cards[i].getAttribute('data-keywords') || "";
+                if (query === "" || keywords.includes(query)) {
+                    cards[i].style.display = "block";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // --- SEAMLESS PDF.JS CANVAS RENDERING ENGINE ---
+        const pdfUrl = 'pdfs/algebra.pdf';
+        // Configure PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        // Fetch and process document layer sequentially
+        pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+            const container = document.getElementById('pdf-seamless-container');
+            container.innerHTML = ''; // Evaporate initial loader indicator state
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(page => {
+                    
+                    // Spawn custom HTML5 Canvas element
+                    const canvas = document.createElement('canvas');
+                    canvas.className = 'pdf-page-canvas';
+                    
+                    container.appendChild(canvas);
+
+                    const context = canvas.getContext('2d');
+                    
+                    // High-density scaling layer for sharp mathematical glyph rendering
+                    const viewport = page.getViewport({ scale: 2.0 }); 
+                    
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            }
+        }).catch(error => {
+            console.error('Error rendering seamless workspace document matrix:', error);
+            document.getElementById('pdf-seamless-container').innerHTML = 
+                `<div class="loading-indicator" style="color: #ef4444;">Failed to build document workspace layout. Please check file placement structure parameters.</div>`;
+        });
+    </script>
+
+</body>
+</html>

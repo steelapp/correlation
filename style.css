@@ -1,0 +1,557 @@
+/* ==========================================================================
+   RESET & SYSTEM BASE ARCHITECTURE
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    /* Set the universal base to your signature baby bluish teal color */
+    background-color: #9cdbe6; 
+    color: #0b4f61;
+    overflow: hidden; 
+    width: 100vw;
+    height: 100vh;
+}
+
+/* ==========================================================================
+   THE LIVING BLUEPRINT ENGINE (SHARED BY SPLASH & INNER WORKSPACE)
+   ========================================================================== */
+.dashboard-container, #splash-screen {
+    background-color: #9cdbe6; 
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, rgba(15, 68, 92, 0.1) 80%),
+        linear-gradient(rgba(131, 196, 155, 0.35) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(131, 196, 155, 0.35) 1px, transparent 1px);
+    background-size: 100% 100%, 24px 24px, 24px 24px;
+    background-position: 0 0, center center, center center;
+    animation: blueprintDrift 28s linear infinite;
+}
+
+.dashboard-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    z-index: 10;
+}
+
+/* ==========================================================================
+   THE LIVING SPLASH SCREEN 
+   ========================================================================== */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+                visibility 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#splash-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(1.05); 
+    transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hide splash screen instantly without transitioning on initial page load if saved */
+#splash-screen.instant-hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: none !important;
+}
+
+.splash-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 3.5rem;
+    z-index: 50; 
+    margin-top: -30px; 
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+        0 20px 50px rgba(11, 62, 77, 0.15),
+        inset 0 0 20px rgba(255,255,255,0.25);
+    animation: boxPulse 6s ease-in-out infinite;
+}
+
+/* 3D Bubble Text Logo with Chromatic Shimmer Animation */
+.tactile-title {
+    font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
+    font-size: 8.5rem;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    position: relative;
+    
+    background: linear-gradient(120deg, #a7f3d0 0%, #22d3ee 35%, #a7f3d0 70%, #22d3ee 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: chromaticShine 5s linear infinite;
+    
+    filter: drop-shadow(0px 16px 24px rgba(11, 79, 97, 0.35));
+    text-shadow: 
+        -4px -4px 0 #fff,  4px -4px 0 #fff, -4px  4px 0 #fff,  4px  4px 0 #fff,
+        -2px -4px 0 #fff,  2px -4px 0 #fff, -4px -2px 0 #fff,  4px -2px 0 #fff,
+        -4px  2px 0 #fff,  4px  2px 0 #fff, -2px  4px 0 #fff,  2px  4px 0 #fff,
+        0px 4px 0px #0b7285,  2px 5px 0px #0b7285, -2px 5px 0px #0b7285,
+        0px 8px 0px #0b7285,  3px 9px 0px #0b7285, -3px 9px 0px #0b7285,
+        0px 12px 0px #0b7285, 4px 13px 0px #0b7285, -4px 13px 0px #0b7285,
+        0px 16px 0px #08515e, 5px 17px 0px #08515e, -5px 17px 0px #08515e,
+        0px 20px 0px #04363f, 5px 21px 0px #04363f, -5px 21px 0px #04363f;
+}
+
+.tactile-subtitle {
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    color: #009cb9;
+    font-size: 1.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    margin-bottom: 2.5rem;
+    text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
+    animation: textBreath 4s ease-in-out infinite;
+}
+
+.pill-start-btn {
+    position: relative;
+    background-color: #008ca6; 
+    color: #ffffff;
+    font-family: 'Georgia', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    font-weight: 600;
+    padding: 1.2rem 5rem;
+    border: none;
+    border-radius: 50px; 
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0, 140, 166, 0.45);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pill-start-btn::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50px;
+    border: 2px solid #22d3ee;
+    opacity: 0.4;
+    animation: auraPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.pill-start-btn:hover {
+    background-color: #007388;
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 16px 35px rgba(0, 140, 166, 0.6);
+}
+
+.pill-start-btn:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+/* ==========================================================================
+   DESK PROP FLOATING SIMULATORS
+   ========================================================================== */
+.desk-prop {
+    position: absolute;
+    filter: drop-shadow(15px 22px 12px rgba(5, 34, 43, 0.2));
+}
+
+.pencil-orange {
+    width: 24px;
+    height: 550px;
+    background: linear-gradient(90deg, #e65c00, #ff9933, #b34700);
+    left: 2%;
+    bottom: -100px;
+    border-radius: 4px;
+    animation: pencilFloat1 16s ease-in-out infinite;
+}
+
+.pencil-yellow {
+    width: 22px;
+    height: 520px;
+    background: linear-gradient(90deg, #e6b800, #ffeb3b, #997a00);
+    left: 5%;
+    bottom: -120px;
+    border-radius: 4px;
+    animation: pencilFloat2 20s ease-in-out infinite;
+}
+
+.pink-set-square {
+    right: -80px;
+    top: 10%;
+    width: 320px;
+    height: 320px;
+    background-color: rgba(236, 72, 153, 0.65);
+    clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+    border: 8px solid rgba(255,255,255,0.4);
+    animation: squareDrift 22s ease-in-out infinite;
+}
+
+.sharpener-box {
+    right: 12%;
+    top: -40px;
+    width: 110px;
+    height: 140px;
+    background: linear-gradient(135deg, #ff8a65, #e64a19);
+    border-radius: 16px;
+    animation: boxFloat 14s ease-in-out infinite;
+}
+
+.plastic-widget {
+    right: 4%;
+    top: -30px;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(0, 140, 166, 0.5);
+    border-radius: 50%;
+    border: 12px double rgba(255,255,255,0.3);
+    animation: widgetRotate 25s linear infinite;
+}
+
+.green-blocks {
+    left: -20px;
+    top: 4%;
+    width: 140px;
+    height: 160px;
+    background: repeating-linear-gradient(
+        0deg,
+        #4caf50,
+        #4caf50 30px,
+        #388e3c 30px,
+        #388e3c 32px
+    );
+    border-radius: 8px;
+    animation: blockDrift 18s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   MAIN WORKSPACE DASHBOARD (LIGHT-STUDIO GLASSMORPHISM VIEW)
+   ========================================================================== */
+.main-content {
+    flex: 1;
+    padding: 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-header {
+    margin-bottom: 2.5rem;
+}
+
+.header-title-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    width: 100%;
+}
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0b4f61; /* Deep structural dark teal text */
+    letter-spacing: -0.03em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.version-tag {
+    background: #008ca6;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 10px rgba(0, 140, 166, 0.15);
+}
+
+.header-home-btn {
+    margin-left: auto; 
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(11, 79, 97, 0.2);
+    color: #0b4f61;
+    padding: 0.6rem 1.4rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.header-home-btn:hover {
+    background: #008ca6;
+    color: #ffffff;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 140, 166, 0.3);
+}
+
+.dashboard-header p {
+    color: #4a717c; /* Soft mid-contrast teal-slate */
+    margin-top: 0.5rem;
+    font-size: 1.05rem;
+}
+
+.interactive-stage {
+    display: flex;
+    gap: 3rem;
+    flex: 1;
+    min-height: 0; 
+}
+
+/* FROSTED STUDIO STACK */
+.category-menu {
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.menu-buttons-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.menu-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #2e5964;
+    padding: 1.2rem 1.5rem;
+    border-radius: 16px;
+    text-align: left;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+.btn-icon {
+    font-size: 1.3rem;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.menu-btn:hover {
+    background: rgba(255, 255, 255, 0.65);
+    color: #0b4f61;
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.menu-btn:hover .btn-icon {
+    transform: scale(1.25) rotate(5deg);
+}
+
+.menu-btn.active {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+    color: #008ca6;
+    border-color: rgba(0, 140, 166, 0.3);
+    box-shadow: 0 8px 20px rgba(11, 79, 97, 0.06);
+}
+
+.menu-btn.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    height: 60%;
+    width: 4px;
+    background-color: #008ca6;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 10px #008ca6;
+}
+
+/* THEATER VIEWPORT (FROSTED CRYSTAL CASE) */
+.display-viewport {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 
+        0 20px 40px -15px rgba(11, 62, 77, 0.1),
+        inset 0 0 40px rgba(255, 255, 255, 0.4);
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    padding: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* AMBIENT ROTATING BACKGROUND AURORAS */
+.slide-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: -150px;
+    right: -150px;
+    border-radius: 50%;
+    filter: blur(110px);
+    opacity: 0.35;
+    pointer-events: none;
+    animation: auroraRotate 12s ease-in-out infinite alternate;
+}
+.bg-algebra { background-color: #38bdf8; }
+.bg-trig { background-color: #ec4899; }
+.bg-spherical { background-color: #a855f7; }
+.bg-geometry { background-color: #10b981; }
+.bg-analytic { background-color: #f59e0b; }
+.bg-diff { background-color: #ef4444; }
+.bg-integral { background-color: #6366f1; }
+
+.slide-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.module-badge {
+    color: #008ca6;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.6rem;
+}
+
+.slide h2 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #0b4f61;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.slide p {
+    color: #38616c;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    max-width: 650px;
+}
+
+/* ==========================================================================
+   THE GRAPHICAL KINETIC MOTION ENGINE (KEYFRAMES)
+   ========================================================================== */
+@keyframes blueprintDrift {
+    0% { background-position: 0 0, 0 0, 0 0; }
+    100% { background-position: 0 0, 96px 96px, 96px 96px; }
+}
+
+@keyframes chromaticShine {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+@keyframes boxPulse {
+    0%, 100% { box-shadow: 0 20px 50px rgba(11, 62, 77, 0.15); transform: translateY(0); }
+    50% { box-shadow: 0 30px 65px rgba(11, 62, 77, 0.25); transform: translateY(-6px); }
+}
+
+@keyframes textBreath {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); color: #00b4d4; }
+}
+
+@keyframes auraPulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1.08); opacity: 0; }
+}
+
+@keyframes pencilFloat1 {
+    0%, 100% { transform: rotate(12deg) translate(0, 0); }
+    50% { transform: rotate(14deg) translate(10px, -20px); }
+}
+
+@keyframes pencilFloat2 {
+    0%, 100% { transform: rotate(9deg) translate(0, 0); }
+    50% { transform: rotate(7deg) translate(-8px, -15px); }
+}
+
+@keyframes squareDrift {
+    0%, 100% { transform: rotate(-35deg) translate(0, 0); }
+    50% { transform: rotate(-32deg) translate(-15px, 25px); }
+}
+
+@keyframes boxFloat {
+    0%, 100% { transform: rotate(25deg) translate(0, 0); }
+    50% { transform: rotate(28deg) translate(15px, 15px); }
+}
+
+@keyframes widgetRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes blockDrift {
+    0%, 100% { transform: rotate(-10deg) translate(0, 0); }
+    50% { transform: rotate(-8deg) translate(10px, -10px); }
+}
+
+@keyframes auroraRotate {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-40px, 40px) scale(1.15); opacity: 0.45; }
+}
+
+/* ==========================================================================
+   MEDIA SCALING RESPONSIVE ARCHITECTURE
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .main-content { padding: 2rem; }
+    .interactive-stage { flex-direction: column; gap: 1.5rem; }
+    .category-menu { width: 100%; height: auto; }
+    .display-viewport { min-height: 320px; }
+    .header-home-btn { position: absolute; right: 0; top: 0; }
+    body { overflow-y: auto; }
+}
+

@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 03: Plane & Solid Geometry Active Recall Studio</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700;800&family=JetBrains+Mono:wght=600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+    <style>
+        /* SITE ARCHITECTURE PRESETS */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-y: auto !important; 
+            overflow-x: hidden !important;
+            height: auto !important;
+            min-height: 100vh;
+            color: #1e3a47;
+            background: linear-gradient(135deg, #f4f7f6 0%, #eef2f5 100%);
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            height: auto !important;
+            min-height: 100vh;
+            display: block; 
+        }
+
+        .main-content {
+            height: auto !important;
+            padding: 3rem 4rem; 
+        }
+
+
+        /* DUAL-VIEW LAYER ARCHITECTURE */
+        .view-panel {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        .view-panel.active-view {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* NATIVE VIEW CONTROL INTERFACE */
+        .hub-toggle-row {
+            display: inline-flex;
+            background: rgba(11, 79, 97, 0.08);
+            padding: 0.4rem;
+            border-radius: 16px;
+            margin: 1.5rem 0 0 0;
+            border: 1px solid rgba(11, 79, 97, 0.05);
+        }
+
+        .toggle-tab-btn {
+            background: transparent;
+            border: none;
+            color: #4a6b75;
+            padding: 0.75rem 1.6rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-tab-btn.active-tab {
+            background: #FFFFFF;
+            color: #0b4f61;
+            box-shadow: 0 4px 12px rgba(11, 79, 97, 0.1);
+        }
+
+        /* PREMIUM CENTERED CITATION BOX STYLING */
+        .sheet-courtesy-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: rgba(11, 79, 97, 0.05); 
+            border: 1px solid rgba(11, 79, 97, 0.12);
+            border-left: 4px solid #008ca6;
+            padding: 1.1rem 2rem;
+            border-radius: 12px;
+            margin: 1.5rem auto 2.5rem auto;
+            max-width: 800px;
+            box-shadow: 0 4px 20px rgba(11, 62, 77, 0.04);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .sheet-courtesy-text {
+            font-size: 0.98rem;
+            font-weight: 500;
+            color: #ffffff !important; 
+            letter-spacing: 0.01em;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .sheet-courtesy-text strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        /* 3D FLASHCARD GRID SYSTEM */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .flashcard {
+            background: transparent;
+            width: 100%;
+            height: 350px; 
+            perspective: 1200px; 
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: left;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; 
+            backface-visibility: hidden;
+            border-radius: 24px;
+            padding: 2rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .card-front {
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px -5px rgba(11, 62, 77, 0.05);
+        }
+
+        .flashcard:hover .card-front {
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 15px 35px rgba(11, 62, 77, 0.1);
+            border-color: rgba(0, 140, 166, 0.3);
+        }
+
+        .card-tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #008ca6;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            background: rgba(0, 140, 166, 0.08);
+            padding: 0.35rem 0.75rem;
+            border-radius: 30px;
+        }
+
+        .card-tag.solid-tag {
+            color: #e28743;
+            background: rgba(226, 135, 67, 0.1);
+        }
+        
+        .card-img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin: 0.5rem 0;
+        }
+
+        .card-front h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0b4f61;
+            margin: auto 0; 
+            line-height: 1.35;
+        }
+
+        .click-hint {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #7ba3af;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-back {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 20px 40px -10px rgba(11, 62, 77, 0.12);
+            transform: rotateY(180deg); 
+            border-left: 6px solid #008ca6; 
+            overflow-y: auto;
+        }
+
+        .flashcard[data-keywords*="solid geometry"] .card-back {
+            border-left-color: #e28743;
+        }
+
+        .card-back h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0b4f61;
+            margin: 0 0 0.75rem 0;
+        }
+
+        .math-block {
+            background: #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #38bdf8; 
+            padding: 0.9rem;
+            border-radius: 14px;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.01em;
+            line-height: 1.4;
+        }
+
+        .card-notes {
+            font-size: 0.9rem;
+            color: #4a6b75;
+            line-height: 1.5;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .card-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.4rem 0 0 0;
+            font-size: 0.85rem;
+        }
+
+        .card-list li {
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .card-list li::before {
+            content: "• ";
+            color: #008ca6;
+            font-weight: bold;
+        }
+        
+        .flashcard[data-keywords*="solid geometry"] .card-list li::before {
+            color: #e28743;
+        }
+
+        .matrix-section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0b4f61;
+            margin: 3.5rem 0 1.5rem 0;
+            letter-spacing: -0.02em;
+            border-bottom: 2px dashed rgba(11, 79, 97, 0.15);
+            padding-bottom: 0.5rem;
+        }
+
+        .module-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            color: #008ca6;
+            background: rgba(0, 140, 166, 0.1);
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* NATIVE CANVAS WORKSPACE CONTAINER STYLES */
+        #pdf-seamless-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem; 
+            margin-top: 1rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .pdf-page-canvas {
+            max-width: 100%;
+            height: auto !important;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 
+                0 20px 40px -15px rgba(11, 62, 77, 0.15),
+                inset 0 0 40px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .pdf-page-canvas:hover {
+            transform: translateY(-4px);
+        }
+
+        .loading-indicator {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0b4f61;
+            padding: 4rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <main class="main-content">
+            
+            <header class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+                <div>
+                    <span class="module-badge">LESSON 03</span>
+                    <h1 style="margin: 0.5rem 0 0.5rem 0; font-size: 2.5rem; font-weight: 800; color: #0b4f61;">Plane & Solid Geometry</h1>
+                    <p style="margin: 0; color: #4a6b75;">Fluently navigate active recall data or complete notes right inside your workspace layout.</p>
+                    
+                    <div class="hub-toggle-row">
+                        <button id="tabCards" class="toggle-tab-btn active-tab" onclick="switchView('panelCards', 'tabCards')">
+                            🗂️ Active Recall Flashcards
+                        </button>
+                        <button id="tabSheet" class="toggle-tab-btn" onclick="switchView('panelSheet', 'tabSheet')">
+                            📄 Formulae & Notes
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="window.location.href='index.html'" class="header-home-btn" style="margin:0;">
+                        ⬅️ Back
+                    </button>
+                </div>
+            </header>
+            
+             <div class="slide-glow bg-algebra" style="opacity: 0.15; pointer-events: none; fixed: true;"></div>
+
+            <div id="panelCards" class="view-panel active-view">
+
+                <h2 class="matrix-section-title">🟥 Plane Geometry: Polygons, Quadrilaterals Triangles & Circles</h2>
+                <div class="flashcard-grid">
+                    
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry general polygon angles interior exterior central diagonals regular">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Geometry</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon points="50,15 80,32.5 80,67.5 50,85 20,67.5 20,32.5" fill="none" stroke="#0b4f61" stroke-width="2"/>
+                                    <line x1="50" y1="85" x2="85" y2="85" stroke="#0b4f61" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                    <circle cx="50" cy="50" r="2" fill="#008ca6"/>
+                                    <line x1="50" y1="50" x2="50" y2="15" stroke="#008ca6" stroke-width="1.2"/>
+                                    <line x1="50" y1="50" x2="80" y2="32.5" stroke="#008ca6" stroke-width="1.2"/>
+                                    <text x="47" y="34" font-size="8" fill="#008ca6" font-weight="bold">α</text> <text x="25" y="62" font-size="8" fill="#e28743" font-weight="bold">θ</text> <text x="56" y="81" font-size="8" fill="#ef4444" font-weight="bold">β</text> </svg>
+                                <h3>General Polygon Properties</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>n-sided Polygon Rules</h4>
+                                <div class="math-block" style="font-size: 0.95rem; text-align: left; padding-left: 15px;">
+                                    • Sum of Int. Angles (θ) = 180°(n - 2)<br>
+                                    • Sum of Ext. Angles (β) = 360°<br>
+                                    • Sum of Cent. Angles (α) = 360°<br>
+                                    • Number of Diagonals = n(n - 3) / 2
+                                </div>
+                                <p></p>
+                                    
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry regular polygon area perimeter apothem side length">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon points="50,10 88,38 74,85 26,85 12,38" fill="rgba(0,140,166,0.1)" stroke="#008ca6" stroke-width="2"/>
+                                    <circle cx="50" cy="52" r="2" fill="#0b4f61"/>
+                                    <line x1="50" y1="52" x2="50" y2="85" stroke="#0b4f61" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                    <text x="42" y="72" font-size="9" fill="#0b4f61" font-style="italic">a</text>
+                                    <line x1="26" y1="89" x2="74" y2="89" stroke="#008ca6" stroke-width="1.5"/>
+                                    <text x="48" y="98" font-size="9" fill="#008ca6" font-style="italic">s</text>
+                                </svg>
+                                <h3>Regular Polygons</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Perimeter & Area Formulas</h4>
+                                <div class="math-block">P = ns<br>A = (P·a) / 2</div>
+                                <p class="card-notes"><b>Alternative Area Formula:</b></p>
+                                <div class="math-block">A = (n·s²) / [4 tan(180°/n)]</div>
+                                <ul class="card-list">
+                                    <li><code>s</code> = length of one side</li>
+                                    <li><code>a</code> = apothem (line from center to mid-side)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry similar polygons ratio area perimeter scale factor scale dimensions">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Geometry</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon points="15,70 40,70 25,40" fill="none" stroke="#0b4f61" stroke-width="2"/>
+                                    <text x="26" y="78" font-size="7" fill="#0b4f61" font-weight="bold">a</text>
+                                    <text x="14" y="55" font-size="7" fill="#0b4f61" font-weight="bold">b</text>
+                                    <text x="34" y="55" font-size="7" fill="#0b4f61" font-weight="bold">c</text>
+                                    
+                                    
+                                    <polygon points="50,70 90,70 66,22" fill="none" stroke="#008ca6" stroke-width="2"/>
+                                    <text x="68" y="78" font-size="7" fill="#008ca6" font-weight="bold">x</text>
+                                    <text x="52" y="48" font-size="7" fill="#008ca6" font-weight="bold">y</text>
+                                    <text x="80" y="48" font-size="7" fill="#008ca6" font-weight="bold">z</text>
+                                    
+                                </svg>
+                                <h3>Similar Polygons</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Proportionality Relationships</h4>
+                                <div class="math-block" style="font-size: 1rem;">
+                                    a/x = b/y = c/z<br><br>
+                                    A<sub>small</sub>/A<sub>big</sub> = (a/x)² = (b/y)² = (c/z)²
+                                </div>
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry area circle circumscribing polygon regular pentagon radius">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon points="50,13 85.3,38.5 71.8,80 28.2,80 14.7,38.5" fill="none" stroke="#d946ef" stroke-width="2"/>
+                                    <circle cx="50" cy="50" r="30" fill="none" stroke="#22c55e" stroke-width="2"/>
+                                    <circle cx="50" cy="50" r="2" fill="#d946ef"/>
+                                    <line x1="50" y1="50" x2="50" y2="80" stroke="#d946ef" stroke-width="2"/>
+                                    <text x="54" y="68" font-size="11" fill="#d946ef" font-family="serif">r</text>
+                                </svg>
+                                <h3>Circumscribing a Circle</h3>
+                                <span class="click-hint">hint: nasaktan...</span>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Polygon Area Formula</h4>
+                                <div class="math-block" style="font-size: 1.1rem;">A = nr² tan(180°/n)</div>
+                                
+                                <ul class="card-list">
+                                    <li><code>n</code> = number of sides of the circumscribing polygon.</li>
+                                    <li><code>r</code> = radius of the inscribed circle (which acts as the apothem of the polygon).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry area circle inscribed polygon regular pentagon radius sine">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="35" fill="none" stroke="#22c55e" stroke-width="2"/>
+                                    <polygon points="50,15 83.3,39.2 70.6,78.3 29.4,78.3 16.7,39.2" fill="none" stroke="#d946ef" stroke-width="2"/>
+                                    <circle cx="50" cy="50" r="2" fill="#d946ef"/>
+                                    <line x1="50" y1="50" x2="83.3" y2="39.2" stroke="#d946ef" stroke-width="2"/>
+                                    <text x="63" y="43" font-size="11" fill="#d946ef" font-family="serif" font-style="italic">r</text>
+                                </svg>
+                                <h3>Inscribed in a Circle</h3>
+                                <span class="click-hint">hint: nagkakasala...</span>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Polygon Area Formula</h4>
+                                <div class="math-block" style="font-size: 1.1rem;">A = ½ nr² sin(360°/n)</div>
+                                
+                                <ul class="card-list">
+                                    <li><code>n</code> = number of sides of the inscribed polygon.</li>
+                                    <li><code>r</code> = radius of the circumscribed circle (which acts as the distance from the center to any vertex of the polygon).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry circle theorem chord perpendicular bisector center radius">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Circle Theorem</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#008ca6" stroke-width="2"/>
+                                    <circle cx="50" cy="50" r="2" fill="#0b4f61"/>
+                                    <line x1="16" y1="70" x2="84" y2="70" stroke="#0b4f61" stroke-width="2"/>
+                                    <line x1="50" y1="50" x2="50" y2="70" stroke="#e28743" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                    <rect x="50" y="66" width="4" height="4" fill="none" stroke="#e28743" stroke-width="1"/>
+                                    <text x="30" y="80" font-size="8" fill="#0b4f61" font-weight="bold">a</text>
+                                    <text x="66" y="80" font-size="8" fill="#0b4f61" font-weight="bold">b</text>
+                                    <text x="44" y="60" font-size="7" fill="#e28743">90°</text>
+                                </svg>
+                                <h3>Chord Perpendicular Property</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Bisector & Center Mechanics</h4>
+                                <div class="math-block">Radius ⊥ Chord ⟹ a = b</div>
+                                <p class="card-notes"><b>Core Rules:</b></p>
+                                <ul class="card-list">
+                                    <li>A straight line drawn from the center of a circle to bisect a chord is perpendicular to that chord.</li>
+                                    <li>Conversely, a perpendicular line from the center will always bisect the chord into two equal halves (<code>a = b</code>).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry circle theorem semicircle diameter ninety degrees right angle triangle">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Circle Theorem</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#008ca6" stroke-width="2"/>
+                                    <circle cx="50" cy="50" r="1.5" fill="#0b4f61"/>
+                                    <line x1="10" y1="50" x2="90" y2="50" stroke="#0b4f61" stroke-width="2"/>
+                                    <polygon points="10,50 36,14 90,50" fill="none" stroke="#0b4f61" stroke-width="1.5"/>
+                                    <rect x="36" y="14" width="4" height="4" fill="none" stroke="#e28743" stroke-width="1" transform="rotate(35 36 14)"/>
+                                    <text x="38" y="26" font-size="8" fill="#e28743" font-weight="bold">90°</text>
+                                </svg>
+                                <h3>Thale's Theorem</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Diameter Subtensions</h4>
+                                <div class="math-block">Inscribed Diameter Angle = 90°</div>
+                                
+                                <ul class="card-list">
+                                    <li>Thales's Theorem states that if you draw any triangle inside a circle such that one side is the circle's diameter, the angle opposite the diameter is always a right angle (90°). In other words, any angle inscribed in a semicircle is 90°.</li>
+                                <p></p>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry circle theorem center circumference semicircle angles subtended arc">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#008ca6" stroke-width="2"/>
+                                    <circle cx="50" cy="50" r="2" fill="#0b4f61"/> 
+                                    <path d="M 20 76 L 50 50 L 80 76" fill="rgba(0,140,166,0.1)" stroke="#0b4f61" stroke-width="1.5"/>
+                                    <path d="M 20 76 L 50 10 L 80 76" fill="rgba(0,140,166,0.1)" stroke="#0b4f61" stroke-width="1.5"/>
+                                    <path d="M 44 54 A 8 8 0 0 0 56 54" fill="none" stroke="#e28743" stroke-width="1.5"/>
+                                    <text x="46" y="65" font-size="8" fill="#0b4f61" font-weight="bold">2θ</text>
+                                    <path d="M 46 15 A 8 8 0 0 0 54 15" fill="none" stroke="#e28743" stroke-width="1.5"/>
+                                    <text x="48" y="26" font-size="8" fill="#0b4f61" font-weight="bold">θ</text>
+                                </svg>
+                                <h3>Central Angle Theorem</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Angle Subtended by an Arc</h4>
+                                <div class="math-block">Center Angle = 2 × Edge Angle</div>
+                                
+                                <ul class="card-list">
+                                    <li>The Central Angle Theorem states: The central angle drawn from any two points on a circle is twice as large as any inscribed angle drawn from those two points.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry triangle inscribed circle inradius area semiperimeter">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Triangle Properties</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon points="50,15 15,80 85,80" fill="none" stroke="#0b4f61" stroke-width="2"/>
+                                    <circle cx="50" cy="58.5" r="21.5" fill="none" stroke="#008ca6" stroke-width="2"/>
+                                    <circle cx="50" cy="58.5" r="1.5" fill="#e28743"/>
+                                    <line x1="50" y1="58.5" x2="50" y2="80" stroke="#e28743" stroke-width="1.5"/>
+                                    <text x="54" y="73" font-size="9" fill="#e28743" font-weight="bold" font-family="serif">r</text>
+                                    <text x="28" y="45" font-size="7" fill="#0b4f61">a</text>
+                                    <text x="68" y="45" font-size="7" fill="#0b4f61">b</text>
+                                    <text x="48" y="88" font-size="7" fill="#0b4f61">c</text>
+                                </svg>
+                                <h3>Radius of Inscribed Circle</h3>
+                                <span class="click-hint"> hint: rats</span>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Inradius Formula (r)</h4>
+                                <div class="math-block" style="font-size: 1.2rem;">r = A<sub>T</sub> / s</div>
+                                <p></p>
+                                <ul class="card-list">
+                                    <li>A<sub>T</sub> = Area of Triangle</li>
+                                    <li>s = (a + b + c) / 2</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry triangle circumscribed circle circumradius area vertices">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Triangle Properties</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#008ca6" stroke-width="2"/>
+                                    <polygon points="50,12 19,74 81,74" fill="none" stroke="#0b4f61" stroke-width="2"/>
+                                    <circle cx="50" cy="50" r="1.5" fill="#e28743"/>
+                                    <line x1="50" y1="50" x2="81" y2="74" stroke="#e28743" stroke-width="1.5"/>
+                                    <text x="63" y="58" font-size="9" fill="#e28743" font-weight="bold" font-family="serif">R</text>
+                                    <text x="30" y="40" font-size="7" fill="#0b4f61">a</text>
+                                    <text x="68" y="40" font-size="7" fill="#0b4f61">b</text>
+                                    <text x="48" y="82" font-size="7" fill="#0b4f61">c</text>
+                                </svg>
+                                <h3>Radius of Circumscribed Circle</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Circumradius Formula (R)</h4>
+                                <div class="math-block" style="font-size: 1.2rem;">R = abc / (4 × Area)</div>
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry quadrilateral trapezoid ptolemy kite rhombus area">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="40" fill="rgba(0,140,166,0.05)" stroke="#7ba3af" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <polygon points="20,24 80,24 88,62 30,86" fill="none" stroke="#008ca6" stroke-width="2"/>
+                                    <line x1="20" y1="24" x2="88" y2="62" stroke="#0b4f61" stroke-width="1.5"/>
+                                    <line x1="80" y1="24" x2="30" y2="86" stroke="#0b4f61" stroke-width="1.5"/>
+                                    <text x="45" y="20" font-size="9" fill="#008ca6">a</text>
+                                    <text x="88" y="45" font-size="9" fill="#008ca6">b</text>
+                                    <text x="55" y="82" font-size="9" fill="#008ca6">c</text>
+                                    <text x="18" y="58" font-size="9" fill="#008ca6">d</text>
+                                    <text x="45" y="40" font-size="8" fill="#0b4f61">d₁</text>
+                                    <text x="65" y="55" font-size="8" fill="#0b4f61">d₂</text>
+                                </svg>
+                                <h3>Quadrilateral</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Cyclic & Standard Areas</h4>
+                                <p class="card-notes"><b>General Formula</b></p>
+                                <div class="math-block">Area = &frac12; &middot; d<sub>1</sub> &middot; d<sub>2</sub> &middot; sin(&theta;)</div>
+                                <p class="card-notes"><b>Cyclic Quadrilateral</b></p>
+                                <div class="math-block">Area = &radic;[(s-a)(s-b)(s-c)(s-d)]</div>
+                                <p class="card-notes"><b>Ptolemy's Theorem</b></p>
+                                <div class="math-block">ac + bd = d₁d₂</div>
+                                
+        
+                                <ul class="card-list">
+                                    <li><b>Trapezoid:</b> <code>Area = median × height</code></li>
+                                    <li><b>Kite & Rhombus:</b> <code>Area = ½ d₁d₂ = ah</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="plane geometry circle arc length sector area segment">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Plane Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#008ca6" stroke-width="2"/>
+                                    <path d="M50,50 L90,50 A40,40 0 0,0 65,13 Z" fill="rgba(0,140,166,0.2)"/>
+                                    <path d="M20,24 A40,40 0 0,0 20,76 L20,24" fill="rgba(11,79,97,0.3)"/>
+                                    <line x1="20" y1="24" x2="20" y2="76" stroke="#0b4f61" stroke-width="1"/>
+                                    <text x="65" y="46" font-size="8" fill="#0b4f61" font-style="italic">r</text>
+                                    <text x="60" y="38" font-size="8" fill="#0b4f61">θ</text>
+                                    <text x="85" y="28" font-size="8" fill="#008ca6" font-weight="bold">s (arc)</text>
+                                    <text x="3" y="53" font-size="7" fill="#0b4f61" transform="rotate(-90 10,50)">Segment</text>
+                                </svg>
+                                <h3>Circles: Arcs, Sectors & Segments</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Circles</h4>
+                                <p class="card-notes"><b>Sector</b></p>
+                                <div class="math-block">Area = πr²θ/360° = ½ r²θ<sub>rad = ½ · s·r</sub></div>
+                                <p class="card-notes"><b>Segment</b></p>
+                                <div class="math-block">Area = A = ½ r² (θ<sub>rad</sub> - sin(θ))</div>
+                                <p class="card-notes"><b>Arc Length</b></p>
+                                <div class="math-block">s = r · θ<sub>rad</sub></div>
+
+                                <p></p>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+ 
+                </div>
+
+                <h2 class="matrix-section-title">🧊 Solid Geometry: Polyhedrons, Sphere, & Platonic Solids</h2>
+                <div class="flashcard-grid">
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="solid geometry cylinder prism prismatoid volume total surface area lateral">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag solid-tag">Solid Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="50" cy="25" rx="30" ry="10" fill="rgba(226,135,67,0.2)" stroke="#e28743" stroke-width="2"/>
+                                    <ellipse cx="50" cy="75" rx="30" ry="10" fill="none" stroke="#e28743" stroke-width="2"/>
+                                    <line x1="20" y1="25" x2="20" y2="75" stroke="#e28743" stroke-width="2"/>
+                                    <line x1="80" y1="25" x2="80" y2="75" stroke="#e28743" stroke-width="2"/>
+                                    <line x1="50" y1="25" x2="80" y2="25" stroke="#0b4f61" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                    <line x1="50" y1="25" x2="50" y2="75" stroke="#0b4f61" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                    <text x="60" y="22" font-size="9" fill="#0b4f61">r</text>
+                                    <text x="42" y="55" font-size="9" fill="#0b4f61">h</text>
+                                </svg>
+                                <h3>Cylinders & Prisms</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Volume & Surface Area</h4>
+                                <p class="card-notes"><b>Prism</b></p>
+                                <div class="math-block">V = A<sub>B</sub>h <br> TSA = 2A<sub>B</sub> + LSA</div>
+                                <p class="card-notes"><b>Cylinder</b></p>
+                                <div class="math-block">V = πr²h<br>TSA = 2πr² + 2πrh</div>
+                                <p class="card-notes"><b>Truncated Prism</b></p>
+                                <div class="math-block">V = A<sub>b</sub> h<sub>ave</sub> <br> TSA = A<sub>1</sub> + A<sub>2</sub> + LSA</div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="solid geometry pyramid cone frustum volume lateral area">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag solid-tag">Solid Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="50" cy="80" rx="35" ry="12" fill="rgba(226,135,67,0.1)" stroke="#e28743" stroke-width="2"/>
+                                    <line x1="15" y1="80" x2="50" y2="15" stroke="#e28743" stroke-width="2"/>
+                                    <line x1="85" y1="80" x2="50" y2="15" stroke="#e28743" stroke-width="2"/>
+                                    <line x1="50" y1="15" x2="50" y2="80" stroke="#0b4f61" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                    <line x1="50" y1="80" x2="85" y2="80" stroke="#0b4f61" stroke-width="1.5" stroke-dasharray="2,2"/>
+                                    <text x="65" y="87" font-size="9" fill="#0b4f61">r</text>
+                                    <text x="42" y="55" font-size="9" fill="#0b4f61">h</text>
+                                    <text x="73" y="45" font-size="9" fill="#e28743">l</text>
+                                </svg>
+                                <h3>Pyramids & Cones</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Pyramids and Cones</h4>
+                                <p class="card-notes"><b>Cone</b></p>
+                                <div class="math-block">V = ⅓ πr²h<br> TSA = πr² + πrl</div>
+                                <p class="card-notes"><b>Standard Pyramids/Cones</b></p>
+                                <div class="math-block">V = ⅓ A<sub>B</sub>·h</div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="solid geometry frustum pyramid cone volume lateral area slant height bases">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Solid Geometry</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon points="42,32 72,32 65,18 45,18" fill="none" stroke="#008ca6" stroke-width="2" stroke-linejoin="round"/>
+                                    <polygon points="25,85 85,85 73,62 33,62" fill="none" stroke="#0b4f61" stroke-width="2" stroke-linejoin="round"/>
+                                    
+                                    <line x1="42" y1="32" x2="25" y2="85" stroke="#0b4f61" stroke-width="2"/>
+                                    <line x1="72" y1="32" x2="85" y2="85" stroke="#0b4f61" stroke-width="2"/>
+                                    <line x1="45" y1="18" x2="33" y2="62" stroke="#0b4f61" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <line x1="65" y1="18" x2="73" y2="62" stroke="#0b4f61" stroke-width="1" stroke-dasharray="2,2"/>
+                                    
+                                    <line x1="55" y1="25" x2="55" y2="73" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                    <circle cx="55" cy="25" r="1.2" fill="#ef4444"/>
+                                    <circle cx="55" cy="73" r="1.2" fill="#ef4444"/>
+                                    
+                                    <line x1="72" y1="32" x2="79" y2="85" stroke="#e28743" stroke-width="1.5"/>
+                                    
+                                    <text x="52" y="14" font-size="7" font-weight="bold" fill="#008ca6">A₁</text>
+                                    <text x="52" y="93" font-size="7" font-weight="bold" fill="#0b4f61">A₂</text>
+                                    <text x="47" y="52" font-size="8" font-weight="bold" fill="#ef4444">h</text>
+                                    <text x="78" y="58" font-size="8" font-weight="bold" fill="#e28743">L</text>
+                                </svg>
+                                <h3>Frustum of a Pyramid/Cone</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Frustum of a Pyramid or Cone</h4>
+                
+                                <div class="math-block">V = <sup>h</sup>/<sub>3</sub> (A₁ + A₂ + √(A₁A₂))</div>
+                                <p></p>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="solid geometry prismatoid volume prismoidal formula midsection bases height">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Solid Geometry</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon points="45,26 72,22 62,14 38,18" fill="none" stroke="#008ca6" stroke-width="2" stroke-linejoin="round"/>
+                                    
+                                    <polygon points="35,55 81,51 70,37 40,41" fill="none" stroke="#e28743" stroke-width="1.5" stroke-dasharray="3,2" stroke-linejoin="round"/>
+                                    
+                                    <polygon points="25,84 90,80 78,61 43,68" fill="none" stroke="#0b4f61" stroke-width="2" stroke-linejoin="round"/>
+                                    
+                                    <line x1="45" y1="26" x2="25" y2="84" stroke="#0b4f61" stroke-width="1.8"/>
+                                    <line x1="72" y1="22" x2="90" y2="80" stroke="#0b4f61" stroke-width="1.8"/>
+                                    <line x1="62" y1="14" x2="78" y2="61" stroke="#0b4f61" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <line x1="38" y1="18" x2="43" y2="68" stroke="#0b4f61" stroke-width="1" stroke-dasharray="2,2"/>
+                                    
+                                    <line x1="53" y1="18" x2="53" y2="73" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,2"/>
+                                    <circle cx="53" cy="18" r="1.2" fill="#ef4444"/>
+                                    <circle cx="53" cy="73" r="1.2" fill="#ef4444"/>
+                                    
+                                    <text x="49" y="10" font-size="7" font-weight="bold" fill="#008ca6">A₁</text>
+                                    <text x="51" y="48" font-size="7" font-weight="bold" fill="#e28743">A_m</text>
+                                    <text x="50" y="91" font-size="8" font-weight="bold" fill="#0b4f61">A₂</text>
+                                    <text x="57" y="33" font-size="8" font-weight="bold" fill="#ef4444">h</text>
+                                </svg>
+                                <h3>Prismatoid</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Prismatoid</h4>
+                                 <div class="math-block">V = <sup>h</sup>/<sub>6</sub> (A₁ + 4A<sub>m</sub> + A₂)</div>
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="solid geometry sphere spherical segment volume surface area">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag solid-tag">Solid Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="40" fill="rgba(226,135,67,0.05)" stroke="#e28743" stroke-width="2"/>
+                                    <ellipse cx="50" cy="50" rx="40" ry="12" fill="none" stroke="#e28743" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                    <line x1="50" y1="50" x2="90" y2="50" stroke="#0b4f61" stroke-width="1.5"/>
+                                    <text x="65" y="46" font-size="9" fill="#0b4f61">r</text>
+                                    <line x1="18" y1="25" x2="82" y2="25" stroke="#e28743" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <path d="M 18 25 A 40 40 0 0 1 82 25" fill="rgba(226,135,67,0.3)"/>
+                                    <line x1="50" y1="10" x2="50" y2="25" stroke="#0b4f61" stroke-width="1"/>
+                                    <text x="52" y="21" font-size="8" fill="#0b4f61">h</text>
+                                </svg>
+                                <h3>Spheres & Spherical Segments</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Volume, Area, Surface Area</h4>
+                                <p class="card-notes"><b>Sphere</b></p>
+                                <div class="math-block">V = (4/3)πr³<br>SA = 4πr²</div>
+                                <p class="card-notes"><b>Spherical Segments (1base)</b></p>
+                                <div class="math-block">V = (πh²/3)(3r - h)<br> A = 2πrh</div>
+                                <p class="card-notes"><b>Spherical Segments (2bases)</b></p>
+                                <div class="math-block">V = (πh/6)(h²+3r²+3R²)<br> A = 2πRh</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="solid geometry spherical cone sector volume zone radius height area">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Solid Geometry</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="35" fill="none" stroke="#0b4f61" stroke-width="1.2" stroke-dasharray="4,3"/>
+                                    
+                                    <path d="M 20,38 A 35,35 0 0,1 80,38" fill="none" stroke="#008ca6" stroke-width="2.5"/>
+                                    
+                                    <path d="M 20,38 Q 50,45 80,38" fill="none" stroke="#008ca6" stroke-width="1.2"/>
+                                    <path d="M 20,38 Q 50,31 80,38" fill="none" stroke="#008ca6" stroke-width="1.2" stroke-dasharray="2,1"/>
+                                    
+                                    <line x1="20" y1="38" x2="50" y2="50" stroke="#0b4f61" stroke-width="2.5"/>
+                                    <line x1="80" y1="38" x2="50" y2="50" stroke="#0b4f61" stroke-width="2.5"/>
+                                    
+                                    <circle cx="50" cy="50" r="1.5" fill="#e28743"/>
+                                    
+                                    <line x1="50" y1="15" x2="50" y2="38" stroke="#ef4444" stroke-width="2"/>
+                                    <line x1="50" y1="38" x2="50" y2="50" stroke="#0b4f61" stroke-width="1.2" stroke-dasharray="2,2"/>
+                                    
+                                    <text x="36" y="43" font-size="9" font-weight="800" fill="#0b4f61" font-family="serif">r</text>
+                                    <text x="54" y="28" font-size="9" font-weight="800" fill="#ef4444" font-family="serif">h</text>
+                                </svg>
+                                <h3>Spherical Cone</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Volume of Spherical Cone</h4>
+                               
+                                <div class="math-block">V = 1/3 A<sub>b</sub>r = 2/3 πr²h</div>
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="solid geometry spherical polygon lune wedge volume excess area">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag solid-tag">Solid Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#e28743" stroke-width="2"/>
+                                    <path d="M50,10 A40,40 0 0,1 50,90 A15,40 0 0,0 50,10" fill="rgba(226,135,67,0.3)"/>
+                                    <path d="M50,10 A40,40 0 0,1 50,90 A15,40 0 0,1 50,10" fill="none" stroke="#e28743" stroke-width="1.5"/>
+                                    <ellipse cx="50" cy="50" rx="40" ry="10" fill="none" stroke="#7ba3af" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <text x="55" y="53" font-size="9" fill="#0b4f61">θ</text>
+                                    <line x1="50" y1="50" x2="90" y2="50" stroke="#0b4f61" stroke-width="1.5"/>
+                                    <text x="70" y="47" font-size="9" fill="#0b4f61">r</text>
+                                </svg>
+                                <h3>Spherical Polygons, Lunes & Wedges</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Angles to Area Conversions</h4>
+                                <p class="card-notes"><b>Lune</b></p>
+                                <div class="math-block">A = (πr²θ) / 90°</div>
+                                <p class="card-notes"><b>Wedge</b></p>
+                                <div class="math-block">V = (πr³θ) / 270°</div>
+                                <p class="card-notes"><b>Spherical Polygon</b></p>
+                                <div class="math-block">A = (πr²E) / 180°</div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="solid geometry similar solids volume surface area ratio unit conversions">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag solid-tag">Solid Geo</span>
+                                <svg class="card-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="15" y="55" width="20" height="20" fill="rgba(226,135,67,0.2)" stroke="#e28743" stroke-width="1.5"/>
+                                    <polygon points="15,55 22,48 42,48 35,55" fill="none" stroke="#e28743" stroke-width="1.5"/>
+                                    <polygon points="35,55 42,48 42,68 35,75" fill="none" stroke="#e28743" stroke-width="1.5"/>
+                                    <text x="20" y="70" font-size="7" fill="#0b4f61">S₁</text>
+                                    <text x="25" y="65" font-size="7" fill="#0b4f61">V₁</text>
+                                    
+                                    <rect x="55" y="45" width="30" height="30" fill="rgba(226,135,67,0.1)" stroke="#e28743" stroke-width="2"/>
+                                    <polygon points="55,45 67,33 97,33 85,45" fill="none" stroke="#e28743" stroke-width="2"/>
+                                    <polygon points="85,45 97,33 97,63 85,75" fill="none" stroke="#e28743" stroke-width="2"/>
+                                    <text x="65" y="68" font-size="9" fill="#0b4f61">S₂</text>
+                                    <text x="70" y="60" font-size="9" fill="#0b4f61">V₂</text>
+                                </svg>
+                                <h3>Similar Solids & Conversions</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Dimensional Scaling Laws</h4>
+                                <div class="math-block">S₁/S₂ = P₁/P₂ = √(A₁/A₂) = ∛(V₁/V₂)</div>
+                                <p class="card-notes"><b>Unit Conversions:</b></p>
+                                <ul class="card-list">
+                                    <li><code>1 m³ = 264 gal</code></li>
+                                    <li><code>1 cm³ = 1 mL</code></li>
+                                    <li><code>1 ton = 2,000 lbs</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="panelSheet" class="view-panel">
+                <div class="sheet-courtesy-box">
+                    <div class="sheet-courtesy-text">
+                        The notes presented in this document are courtesy of <strong>Engr. Neil Jon P. Lotivio</strong>.
+                    </div>
+                </div>
+                
+                <div id="pdf-seamless-container">
+                    <div class="loading-indicator">Compiling Native Geometry Workspace...</div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Fluent single-page viewport toggle routing
+        function switchView(panelId, tabId) {
+            const panels = document.getElementsByClassName('view-panel');
+            for(let i = 0; i < panels.length; i++) {
+                panels[i].classList.remove('active-view');
+            }
+            
+            const tabs = document.getElementsByClassName('toggle-tab-btn');
+            for(let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active-tab');
+            }
+            
+            document.getElementById(panelId).classList.add('active-view');
+            document.getElementById(tabId).classList.add('active-tab');
+        }
+
+        // Toggles 3D flip animation states cleanly
+        function toggleFlip(cardElement) {
+            cardElement.classList.toggle('flipped');
+        }
+
+        // High-speed keyword text index matching filter algorithm
+        function filterFlashcards() {
+            const query = document.getElementById('matrixSearch').value.toLowerCase().trim();
+            const cards = document.getElementsByClassName('flashcard');
+
+            for (let i = 0; i < cards.length; i++) {
+                const keywords = cards[i].getAttribute('data-keywords') || "";
+                if (query === "" || keywords.includes(query)) {
+                    cards[i].style.display = "block";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // --- SEAMLESS PDF.JS CANVAS RENDERING ENGINE ---
+        const pdfUrl = 'pdfs/geometry.pdf'; // Switched to geometry PDF
+        // Configure PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+        // Fetch and process document layer sequentially
+        pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+            const container = document.getElementById('pdf-seamless-container');
+            container.innerHTML = ''; // Evaporate initial loader indicator state
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(page => {
+                    // Spawn custom HTML5 Canvas element
+                    const canvas = document.createElement('canvas');
+                    canvas.className = 'pdf-page-canvas';
+                    
+                    container.appendChild(canvas);
+
+                    const context = canvas.getContext('2d');
+                    
+                    // High-density scaling layer for sharp mathematical glyph rendering
+                    const viewport = page.getViewport({ scale: 2.0 }); 
+                    
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+
+                    page.render(renderContext);
+                });
+            }
+        }).catch(error => {
+            console.error('Error rendering seamless workspace document matrix:', error);
+            document.getElementById('pdf-seamless-container').innerHTML = 
+                `<div class="loading-indicator" style="color: #ef4444;">Failed to build document workspace layout. Please check file placement structure parameters.</div>`;
+        });
+    </script>
+
+</body>
+</html>

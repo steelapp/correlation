@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 04: Analytic Geometry Active Recall Studio</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700;800&family=JetBrains+Mono:wght=600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+    <style>
+        /* SITE ARCHITECTURE PRESETS */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-y: auto !important; 
+            overflow-x: hidden !important;
+            height: auto !important;
+            min-height: 100vh;
+            color: #1e3a47;
+            background: linear-gradient(135deg, #f4f7f6 0%, #eef2f5 100%);
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            height: auto !important;
+            min-height: 100vh;
+            display: block; 
+        }
+
+        .main-content {
+            height: auto !important;
+            padding: 3rem 4rem; 
+        }
+
+
+        /* DUAL-VIEW LAYER ARCHITECTURE */
+        .view-panel {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        .view-panel.active-view {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* NATIVE VIEW CONTROL INTERFACE */
+        .hub-toggle-row {
+            display: inline-flex;
+            background: rgba(11, 79, 97, 0.08);
+            padding: 0.4rem;
+            border-radius: 16px;
+            margin: 1.5rem 0 0 0;
+            border: 1px solid rgba(11, 79, 97, 0.05);
+        }
+
+        .toggle-tab-btn {
+            background: transparent;
+            border: none;
+            color: #4a6b75;
+            padding: 0.75rem 1.6rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-tab-btn.active-tab {
+            background: #FFFFFF;
+            color: #0b4f61;
+            box-shadow: 0 4px 12px rgba(11, 79, 97, 0.1);
+        }
+
+        /* PREMIUM CENTERED CITATION BOX STYLING */
+        .sheet-courtesy-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: rgba(11, 79, 97, 0.05); 
+            border: 1px solid rgba(11, 79, 97, 0.12);
+            border-left: 4px solid #008ca6;
+            padding: 1.1rem 2rem;
+            border-radius: 12px;
+            margin: 1.5rem auto 2.5rem auto;
+            max-width: 800px;
+            box-shadow: 0 4px 20px rgba(11, 62, 77, 0.04);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .sheet-courtesy-text {
+            font-size: 0.98rem;
+            font-weight: 500;
+            color: #ffffff !important; 
+            letter-spacing: 0.01em;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .sheet-courtesy-text strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        /* 3D FLASHCARD GRID SYSTEM */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .flashcard {
+            background: transparent;
+            width: 100%;
+            height: 350px; 
+            perspective: 1200px; 
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: left;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; 
+            backface-visibility: hidden;
+            border-radius: 24px;
+            padding: 2rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .card-front {
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px -5px rgba(11, 62, 77, 0.05);
+        }
+
+        .flashcard:hover .card-front {
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 15px 35px rgba(11, 62, 77, 0.1);
+            border-color: rgba(0, 140, 166, 0.3);
+        }
+
+        .card-tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #008ca6;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            background: rgba(0, 140, 166, 0.08);
+            padding: 0.35rem 0.75rem;
+            border-radius: 30px;
+        }
+
+        .card-tag.solid-tag {
+            color: #e28743;
+            background: rgba(226, 135, 67, 0.1);
+        }
+        
+        .card-img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin: 0.5rem 0;
+        }
+
+        .card-front h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0b4f61;
+            margin: auto 0; 
+            line-height: 1.35;
+        }
+
+        .click-hint {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #7ba3af;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-back {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 20px 40px -10px rgba(11, 62, 77, 0.12);
+            transform: rotateY(180deg); 
+            border-left: 6px solid #008ca6; 
+            overflow-y: auto;
+        }
+
+        .flashcard[data-keywords*="solid geometry"] .card-back {
+            border-left-color: #e28743;
+        }
+
+        .card-back h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0b4f61;
+            margin: 0 0 0.75rem 0;
+        }
+
+        .math-block {
+            background: #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #38bdf8; 
+            padding: 0.9rem;
+            border-radius: 14px;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.01em;
+            line-height: 1.4;
+        }
+
+        .card-notes {
+            font-size: 0.9rem;
+            color: #4a6b75;
+            line-height: 1.5;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .card-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.4rem 0 0 0;
+            font-size: 0.85rem;
+        }
+
+        .card-list li {
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .card-list li::before {
+            content: "• ";
+            color: #008ca6;
+            font-weight: bold;
+        }
+        
+        .flashcard[data-keywords*="solid geometry"] .card-list li::before {
+            color: #e28743;
+        }
+
+        .matrix-section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0b4f61;
+            margin: 3.5rem 0 1.5rem 0;
+            letter-spacing: -0.02em;
+            border-bottom: 2px dashed rgba(11, 79, 97, 0.15);
+            padding-bottom: 0.5rem;
+        }
+
+        .module-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            color: #008ca6;
+            background: rgba(0, 140, 166, 0.1);
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* NATIVE CANVAS WORKSPACE CONTAINER STYLES */
+        #pdf-seamless-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem; 
+            margin-top: 1rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .pdf-page-canvas {
+            max-width: 100%;
+            height: auto !important;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 
+                0 20px 40px -15px rgba(11, 62, 77, 0.15),
+                inset 0 0 40px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .pdf-page-canvas:hover {
+            transform: translateY(-4px);
+        }
+
+        .loading-indicator {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0b4f61;
+            padding: 4rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <main class="main-content">
+            
+            <header class="dashboard-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+                <div>
+                    <span class="module-badge">LESSON 04</span>
+                    <h1 style="margin: 0.5rem 0 0.5rem 0; font-size: 2.5rem; font-weight: 800; color: #0b4f61;">Analytic Geometry</h1>
+                    <p style="margin: 0; color: #4a6b75;">Fluently navigate active recall data or complete notes right inside your workspace layout.</p>
+                    
+                    <div class="hub-toggle-row">
+                        <button id="tabCards" class="toggle-tab-btn active-tab" onclick="switchView('panelCards', 'tabCards')">
+                            🗂️ Active Recall Flashcards
+                        </button>
+                        <button id="tabSheet" class="toggle-tab-btn" onclick="switchView('panelSheet', 'tabSheet')">
+                            📄 Formulae & Notes
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="window.location.href='index.html'" class="header-home-btn" style="margin:0;">
+                        ⬅️ Back
+                    </button>
+                </div>
+            </header>
+            
+             <div class="slide-glow bg-algebra" style="opacity: 0.15; pointer-events: none; fixed: true;"></div>
+
+            <div id="panelCards" class="view-panel active-view">
+
+                <h2 class="matrix-section-title">📈 Analytic Geometry: Lines & Conic Sections</h2>
+                <div class="flashcard-grid">
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="analytic geometry straight line equations slope intercept point parallel perpendicular">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Lines</span>
+                                <svg class="card-img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="20" y1="90" x2="100" y2="90" stroke="#cbd5e1" stroke-width="1.5"/>
+                                    <line x1="30" y1="100" x2="30" y2="20" stroke="#cbd5e1" stroke-width="1.5"/>
+                                    
+                                    <line x1="15" y1="80" x2="90" y2="30" stroke="#008ca6" stroke-width="2.5"/>
+                                    
+                                    <circle cx="75" cy="90" r="3" fill="#e28743"/>
+                                    <circle cx="30" cy="70" r="3" fill="#ef4444"/>
+                                    
+                                    <text x="72" y="105" font-size="10" font-weight="bold" fill="#e28743">a</text>
+                                    <text x="15" y="73" font-size="10" font-weight="bold" fill="#ef4444">b</text>
+                                    <text x="50" y="50" font-size="11" font-weight="bold" fill="#0b4f61">Slope (m)</text>
+                                </svg>
+                                <h3>Straight Line Equations</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Equation of a Line</h4>
+                                <p class="card-notes"><b>Slope-Intercept Form</b></p>
+                                <div class="math-block">y = mx + b</div>
+                                <p class="card-notes"><b>Point-Slope Form</b></p>
+                                <div class="math-block">y - y₁ = m(x - x₁)</div>
+                                <p class="card-notes"><b>Intercept Form</b></p>
+                                <div class="math-block"><sup>x</sup>/<sub>a</sub> + <sup>y</sup>/<sub>b</sub> = 1</div>
+                                
+                                <ul class="card-list">
+                                    <li><b>Parallel:</b> Equal slopes (<code>m₁ = m₂</code>)</li>
+                                    <li><b>Perpendicular:</b> Negative reciprocals (<code>m₁ = -1 / m₂</code>)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="analytic geometry line distance point angle parallel distance intersection">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Lines</span>
+                                <svg class="card-img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="20" y1="80" x2="100" y2="40" stroke="#008ca6" stroke-width="2"/>
+                                    <line x1="20" y1="50" x2="100" y2="10" stroke="#008ca6" stroke-width="2"/>
+                                    
+                                    <line x1="60" y1="60" x2="50" y2="35" stroke="#ef4444" stroke-width="2" stroke-dasharray="3,2"/>
+                                    <text x="58" y="52" font-size="10" font-weight="bold" fill="#ef4444">d</text>
+
+                                    <line x1="20" y1="100" x2="90" y2="70" stroke="#0b4f61" stroke-width="2"/>
+                                    <path d="M 47,88 A 12,12 0 0,1 55,75" fill="none" stroke="#e28743" stroke-width="2"/>
+                                    <text x="55" y="90" font-size="10" font-weight="bold" fill="#e28743">θ</text>
+                                </svg>
+                                <h3>Distances & Angles</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Distance Formulas</h4>
+                                <p class="card-notes"><b>Point to a Line</b></p>
+                                <div class="math-block">d = |Ax₁ + By₁ + C| / √(A² + B²)</div>
+                                <p class="card-notes"><b>Between 2 Parallel Lines</b></p>
+                                <div class="math-block">d = |C₂ - C₁| / √(A² + B²)</div>
+                                <p class="card-notes"><b>Angle Between 2 Lines</b></p>
+                                <div class="math-block">tan θ = (m₂ - m₁) / (1 + m₁m₂)</div>
+
+                            
+                                <ul class="card-list">
+                                    <li><b>General Equation of a Line:</b> Ax+By+C=0</li>
+                                    <li><b>Standard Form:</b> Ax+By=C</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="analytic geometry conics general equation discriminant parabola ellipse hyperbola circle">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Conic Sections</span>
+                                <svg class="card-img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="30" cy="35" r="15" fill="none" stroke="#008ca6" stroke-width="2.5"/> <ellipse cx="85" cy="35" rx="20" ry="12" fill="none" stroke="#e28743" stroke-width="2.5"/> <path d="M 15,100 Q 35,60 55,100" fill="none" stroke="#ef4444" stroke-width="2.5"/> <path d="M 75,70 Q 85,90 75,110" fill="none" stroke="#0b4f61" stroke-width="2.5"/> <path d="M 105,70 Q 95,90 105,110" fill="none" stroke="#0b4f61" stroke-width="2.5"/> </svg>
+                                <h3>General Conic Equation</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Discriminant B² - 4AC</h4>
+                                <div class="math-block" style="font-size: 0.85rem; line-height: 1.6;">
+                                    Ax² + Bxy + Cy² + Dx + Ey + F = 0<br><br>
+                                    B² - 4AC = 0 (Parabola)<br>
+                                    B² - 4AC < 0 (Ellipse)<br>
+                                    B² - 4AC > 0 (Hyperbola)
+                                </div>
+                                <p class="card-notes"><b>If B = 0 (No xy term):</b></p>
+                                <ul class="card-list">
+                                    <li><code>A = C</code> : Circle</li>
+                                    <li><code>A = 0</code> or <code>C = 0</code> : Parabola</li>
+                                    <li><code>A ≠ C</code> (same sign) : Ellipse</li>
+                                    <li><code>A & C</code> (opp. signs) : Hyperbola</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="analytic geometry circle center radius standard general form">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Conic Sections</span>
+                                <svg class="card-img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="20" y1="80" x2="100" y2="80" stroke="#cbd5e1" stroke-width="1.5"/>
+                                    <line x1="40" y1="100" x2="40" y2="20" stroke="#cbd5e1" stroke-width="1.5"/>
+                                    
+                                    <circle cx="65" cy="55" r="25" fill="rgba(0, 140, 166, 0.1)" stroke="#008ca6" stroke-width="2.5"/>
+                                    <circle cx="65" cy="55" r="3" fill="#0b4f61"/>
+                                    
+                                    <line x1="65" y1="55" x2="85" y2="40" stroke="#e28743" stroke-width="2"/>
+                                    <text x="78" y="42" font-size="10" font-weight="bold" fill="#e28743">r</text>
+                                    
+                                    <text x="50" y="70" font-size="10" font-weight="bold" fill="#0b4f61">C(h, k)</text>
+                                </svg>
+                                <h3>The Circle</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Standard & General Forms</h4>
+                                <p class="card-notes"><b>Standard Center (h,k)</b></p>
+                                <div class="math-block">(x - h)² + (y - k)² = r²</div>
+                                <p class="card-notes"><b>General Form</b></p>
+                                <div class="math-block">x² + y² + Ax + By + C = 0</div>
+
+
+                                <p class="card-notes"><b>Properties:</b></p>
+                                <ul class="card-list">
+                                    <li>If center is at the origin <code>(0,0)</code>, the formula simplifies to <code>x² + y² = r²</code>.</li>
+                                    <li>To convert from General to Standard, complete the square for both <code>x</code> and <code>y</code>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="analytic geometry parabola vertex focus directrix latus rectum">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Conic Sections</span>
+                                <svg class="card-img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="60" y1="10" x2="60" y2="100" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,2"/>
+                                    <line x1="20" y1="85" x2="100" y2="85" stroke="#0b4f61" stroke-width="2"/> <text x="75" y="95" font-size="9" fill="#0b4f61" font-weight="bold">Directrix</text>
+                                    
+                                    <path d="M 20,20 Q 60,90 100,20" fill="none" stroke="#008ca6" stroke-width="3"/>
+                                    
+                                    <circle cx="60" cy="65" r="3" fill="#e28743"/> <circle cx="60" cy="45" r="3" fill="#ef4444"/> <text x="66" y="68" font-size="9" font-weight="bold" fill="#e28743">V(h,k)</text>
+                                    <text x="66" y="48" font-size="9" font-weight="bold" fill="#ef4444">F</text>
+                                    
+                                    <text x="50" y="58" font-size="9" font-weight="bold" fill="#0b4f61">a</text>
+                                    <text x="50" y="78" font-size="9" font-weight="bold" fill="#0b4f61">a</text>
+                                </svg>
+                                <h3>The Parabola</h3>
+                                <span class="click-hint">hint: yung di naka square dun maga open</span>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Standard Forms & Distances</h4>
+                                    <p class="card-notes"><b>Up/Down</b></p>
+                                    <div class="math-block">(x - h)² = ±4a(y - k)</div>
+                                    <p class="card-notes"><b>Left/Right</b></p>
+                                    <div class="math-block">(y - k)² = ±4a(x - h)</div>
+                               
+                                    <ul class="card-list">
+                                    <li>a = Distance from Vertex to Focus = Distance from Vertex to Directrix.</li>
+                                    <li>Latus Rectum: L = 4a. It passes through the focus, parallel to the directrix.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                                
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="analytic geometry ellipse foci major minor axis vertices latus rectum area">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Conic Sections</span>
+                                <svg class="card-img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="10" y1="60" x2="110" y2="60" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,2"/>
+                                    <line x1="60" y1="10" x2="60" y2="110" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,2"/>
+                                    
+                                    <ellipse cx="60" cy="60" rx="45" ry="25" fill="rgba(0, 140, 166, 0.05)" stroke="#008ca6" stroke-width="2.5"/>
+                                    
+                                    <circle cx="60" cy="60" r="2.5" fill="#0b4f61"/> <circle cx="35" cy="60" r="3" fill="#ef4444"/> <circle cx="85" cy="60" r="3" fill="#ef4444"/> <line x1="85" y1="39" x2="85" y2="81" stroke="#e28743" stroke-width="1.5"/>
+                                    
+                                    <text x="70" y="56" font-size="10" font-weight="bold" fill="#0b4f61">c</text>
+                                    <text x="80" y="70" font-size="10" font-weight="bold" fill="#0b4f61">a</text>
+                                    <text x="50" y="45" font-size="10" font-weight="bold" fill="#0b4f61">b</text>
+                                    <line x1="60" y1="60" x2="105" y2="60" stroke="#008ca6" stroke-width="1.5"/> <line x1="60" y1="60" x2="60" y2="35" stroke="#008ca6" stroke-width="1.5"/> </svg>
+                                <h3>The Ellipse</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Standard Form & Properties</h4>
+                                <p class="card-notes"><b>Major Axis Parallel to X</b></p>
+                                    <div class="math-block">(x - h)² / a² + (y - k)² / b² = 1</div>
+                                    <p class="card-notes"><b>Major Axis Parallel to y</b></p>
+                                    <div class="math-block">(y - k)² / a² + (x - h)² / b² = 1</div>
+                               
+                                    <ul class="card-list">
+                                    <li>a > b</li>
+                                    <li>a² = b² + c²</li>
+                                    <li>LR =2b²/a</li>
+                                    <li>d=a/e</li>
+                                    <li>e=c/a</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="analytic geometry hyperbola asymptotes foci transverse conjugate axis">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Conic Sections</span>
+                                <svg class="card-img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="20" y1="20" x2="100" y2="100" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                    <line x1="20" y1="100" x2="100" y2="20" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3,2"/>
+                                    
+                                    <rect x="40" y="40" width="40" height="40" fill="none" stroke="#e28743" stroke-width="1.5"/>
+                                    <text x="45" y="58" font-size="9" font-weight="bold" fill="#e28743">a</text>
+                                    <text x="65" y="75" font-size="9" font-weight="bold" fill="#e28743">b</text>
+                                    
+                                    <path d="M 20,10 Q 40,60 20,110" fill="none" stroke="#008ca6" stroke-width="2.5"/>
+                                    <path d="M 100,10 Q 80,60 100,110" fill="none" stroke="#008ca6" stroke-width="2.5"/>
+                                    
+                                    <circle cx="25" cy="60" r="2.5" fill="#ef4444"/>
+                                    <circle cx="95" cy="60" r="2.5" fill="#ef4444"/>
+                                    <text x="82" y="55" font-size="9" font-weight="bold" fill="#ef4444">F</text>
+                                </svg>
+                                <h3>The Hyperbola</h3>
+                                <span class="click-hint">hint: kung san + dun maga open</span>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Standard Form & Asymptotes</h4>
+                                <p class="card-notes"><b>Transverse Axis Parallel to X</b></p>
+                                    <div class="math-block">(x - h)² / a² - (y - k)² / b² = 1</div>
+                                    <p class="card-notes"><b>Transverse Axis Parallel to y</b></p>
+                                    <div class="math-block">(y - k)² / a² - (x - h)² / b² = 1</div>
+                               
+                                    <ul class="card-list">
+                                    <li>a > b or a < b, but +a </li>
+                                    <li>a² + b² = c²</li>
+                                    <li>LR =2b²/a</li>
+                                    <li>d=a/e</li>
+                                    <li>e=c/a</li>
+                                    <li>assymptote: y ± (b/a)x </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="flashcard" onclick="toggleFlip(this)" data-keywords="analytic geometry polar coordinate system radius angle theta conversion rectangular">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <span class="card-tag">Systems</span>
+                                <svg class="card-img" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                                    <line x1="20" y1="90" x2="100" y2="90" stroke="#cbd5e1" stroke-width="2"/>
+                                    <line x1="30" y1="100" x2="30" y2="20" stroke="#cbd5e1" stroke-width="2"/>
+                                    
+                                    <polygon points="30,90 85,90 85,35" fill="rgba(0, 140, 166, 0.1)" stroke="none"/>
+                                    <line x1="85" y1="90" x2="85" y2="35" stroke="#0b4f61" stroke-width="2" stroke-dasharray="3,2"/>
+                                    <line x1="30" y1="90" x2="85" y2="35" stroke="#ef4444" stroke-width="2.5"/>
+                                    
+                                    <circle cx="85" cy="35" r="3" fill="#0b4f61"/>
+                                    <text x="82" y="25" font-size="10" font-weight="bold" fill="#0b4f61">P(r, θ)</text>
+                                    
+                                    <path d="M 50,90 A 20,20 0 0,0 45,75" fill="none" stroke="#e28743" stroke-width="2"/>
+                                    <text x="54" y="82" font-size="11" font-weight="bold" fill="#e28743">θ</text>
+                                    
+                                    <text x="52" y="55" font-size="11" font-weight="bold" fill="#ef4444">r</text>
+                                    <text x="55" y="105" font-size="11" font-weight="bold" fill="#0b4f61">x</text>
+                                    <text x="92" y="65" font-size="11" font-weight="bold" fill="#0b4f61">y</text>
+                                </svg>
+                                <h3>Polar Coordinate System</h3>
+                                <span class="click-hint">🔄 Click to Flip</span>
+                            </div>
+                            <div class="card-back">
+                                <h4>Rectangular / Polar Conversions</h4>
+                                <div class="math-block" style="font-size: 1rem; line-height: 1.8;">
+                                    x = r cos(θ)<br>
+                                    y = r sin(θ)<br>
+                                    r² = x² + y²<br>
+                                    θ = tan⁻¹( <sup>y</sup>/<sub>x</sub> )
+                                </div>
+                                <p></p>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </div>
+
+            <div id="panelSheet" class="view-panel">
+                <div class="sheet-courtesy-box">
+                    <div class="sheet-courtesy-text">
+                        The notes presented in this document are courtesy of <strong>Engr. Neil Jon P. Lotivio</strong>.
+                    </div>
+                </div>
+                
+                <div id="pdf-seamless-container">
+                    <div class="loading-indicator">Compiling Native Geometry Workspace...</div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Fluent single-page viewport toggle routing
+        function switchView(panelId, tabId) {
+            const panels = document.getElementsByClassName('view-panel');
+            for(let i = 0; i < panels.length; i++) {
+                panels[i].classList.remove('active-view');
+            }
+            
+            const tabs = document.getElementsByClassName('toggle-tab-btn');
+            for(let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active-tab');
+            }
+            
+            document.getElementById(panelId).classList.add('active-view');
+            document.getElementById(tabId).classList.add('active-tab');
+        }
+
+        // Toggles 3D flip animation states cleanly
+        function toggleFlip(cardElement) {
+            cardElement.classList.toggle('flipped');
+        }
+
+        // High-speed keyword text index matching filter algorithm
+        function filterFlashcards() {
+            const query = document.getElementById('matrixSearch').value.toLowerCase().trim();
+            const cards = document.getElementsByClassName('flashcard');
+
+            for (let i = 0; i < cards.length; i++) {
+                const keywords = cards[i].getAttribute('data-keywords') || "";
+                if (query === "" || keywords.includes(query)) {
+                    cards[i].style.display = "block";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // --- SEAMLESS PDF.JS CANVAS RENDERING ENGINE ---
+        const pdfUrl = 'pdfs/analytic-geo.pdf'; // Switched to geometry PDF
+        // Configure PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+        // Fetch and process document layer sequentially
+        pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+            const container = document.getElementById('pdf-seamless-container');
+            container.innerHTML = ''; // Evaporate initial loader indicator state
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(page => {
+                    // Spawn custom HTML5 Canvas element
+                    const canvas = document.createElement('canvas');
+                    canvas.className = 'pdf-page-canvas';
+                    
+                    container.appendChild(canvas);
+
+                    const context = canvas.getContext('2d');
+                    
+                    // High-density scaling layer for sharp mathematical glyph rendering
+                    const viewport = page.getViewport({ scale: 2.0 }); 
+                    
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+
+                    page.render(renderContext);
+                });
+            }
+        }).catch(error => {
+            console.error('Error rendering seamless workspace document matrix:', error);
+            document.getElementById('pdf-seamless-container').innerHTML = 
+                `<div class="loading-indicator" style="color: #ef4444;">Failed to build document workspace layout. Please check file placement structure parameters.</div>`;
+        });
+    </script>
+
+</body>
+</html>

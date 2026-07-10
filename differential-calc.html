@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 05: Calculus</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+
+    <style>
+        /* OVERRIDE SYSTEM ARCHITECTURE FOR TRUE SEAMLESS SCROLLING */
+        body {
+            overflow-y: auto !important; 
+            overflow-x: hidden !important;
+            height: auto !important;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            height: auto !important;
+            min-height: 100vh;
+            display: block; 
+        }
+
+        .main-content {
+            height: auto !important;
+            min-height: 100vh;
+            padding: 3rem 4rem; 
+        }
+
+        /* NATIVE CANVAS CONTAINER 
+           No grey boxes, no frames, no borders. 
+           It acts purely as a wrapper for your document elements.
+        */
+        #pdf-seamless-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem; /* Generous gap between rendered pages */
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* SEAMLESS CANVAS PAGE STYLING
+           We apply your exact glassmorphism design variables to the pages themselves!
+        */
+        .pdf-page-canvas {
+            max-width: 100%;
+            height: auto !important;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6); /* Translucent paper feel */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 
+                0 20px 40px -15px rgba(11, 62, 77, 0.15),
+                inset 0 0 40px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .pdf-page-canvas:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Custom Loading State matching your theme colors */
+        .loading-indicator {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0b4f61;
+            padding: 4rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+
+        /* PREMIUM CENTERED CITATION BOX STYLING */
+        .sheet-courtesy-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: rgba(11, 79, 97, 0.05); 
+            border: 1px solid rgba(11, 79, 97, 0.12);
+            border-left: 4px solid #008ca6;
+            padding: 1.1rem 2rem;
+            border-radius: 12px;
+            margin: 1.5rem auto 2.5rem auto;
+            max-width: 800px;
+            box-shadow: 0 4px 20px rgba(11, 62, 77, 0.04);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .sheet-courtesy-text {
+            font-size: 0.98rem;
+            font-weight: 500;
+            color: #ffffff !important; 
+            letter-spacing: 0.01em;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .sheet-courtesy-text strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <main class="main-content">
+            
+            <header class="dashboard-header">
+                <div class="header-title-row">
+                    <div>
+                        <span class="module-badge">LESSON 05</span>
+                        <h1>Differential and Integral Calculus</h1>
+                    </div>
+                    
+                    <button onclick="window.location.href='index.html'" class="header-home-btn" title="Return to Hub">
+                        <span class="home-icon">⬅️</span> Back
+                    </button>
+                </div>
+                <p>These notes are compiled natively on-screen. Scroll down smoothly to review your formulas.</p>
+            </header>
+
+            <div class="slide-glow bg-algebra" style="opacity: 0.15; pointer-events: none; fixed: true;"></div>
+
+            <div id="panelSheet" class="view-panel">
+                <div class="sheet-courtesy-box">
+                    <div class="sheet-courtesy-text">
+                        The notes presented in this document are courtesy of <strong>Engr. Neil Jon P. Lotivio</strong>.
+                    </div>
+                </div>
+                
+                
+            <div id="pdf-seamless-container">
+                <div class="loading-indicator">Compiling Native Algebra Workspace...</div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Direct route to your file directory
+        const pdfUrl = 'pdfs/calculus.pdf';
+
+        // Configure PDF.js Worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+        // Fetch and process the PDF document
+        pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+            const container = document.getElementById('pdf-seamless-container');
+            container.innerHTML = ''; // Clear loading notification
+
+            // Loop sequentially through every page in your PDF document
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(page => {
+                    
+                    // Create an HTML5 Canvas component for the page layout
+                    const canvas = document.createElement('canvas');
+                    canvas.className = 'pdf-page-canvas';
+                    container.appendChild(canvas);
+
+                    const context = canvas.getContext('2d');
+                    
+                    // Determine viewport scaling relative to your container width
+                    const viewport = page.getViewport({ scale: 2.0 }); // Scale factor of 2 offers crisp rendering
+                    
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    // Paint the page document directly onto your native canvas pipeline
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            }
+        }).catch(error => {
+            console.error('Error rendering seamless workspace:', error);
+            document.getElementById('pdf-seamless-container').innerHTML = 
+                `<div class="loading-indicator" style="color: #ef4444;">Failed to build workspace. Please verify algebra.pdf resides inside the pdfs folder.</div>`;
+        });
+    </script>
+
+</body>
+</html>

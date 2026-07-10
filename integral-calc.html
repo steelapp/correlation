@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Profile</title>
+    <style>
+        /* ==========================================================================
+           1. YOUR ORIGINAL ARCHITECTURE
+           ========================================================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #9cdbe6; color: #0b4f61; width: 100vw; height: 100vh; overflow: hidden; }
+
+        .dashboard-container {
+            display: flex; width: 100vw; height: 100vh; position: relative;
+            background: #9cdbe6;
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, rgba(15, 68, 92, 0.1) 80%), 
+                              linear-gradient(rgba(131, 196, 155, 0.35) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(131, 196, 155, 0.35) 1px, transparent 1px);
+            background-size: 100% 100%, 24px 24px, 24px 24px;
+        }
+
+        .main-content { flex: 1; padding: 3rem 4rem; display: flex; flex-direction: column; }
+
+        /* ==========================================================================
+           2. THEATER VIEWPORT (FROSTED CRYSTAL CASE)
+           ========================================================================== */
+        .display-viewport {
+            flex: 1; 
+            background: rgba(255, 255, 255, 0.45); 
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px; 
+            position: relative; 
+            backdrop-filter: blur(14px); 
+            overflow: hidden;
+            box-shadow: 0 20px 40px -15px rgba(11, 62, 77, 0.1), inset 0 0 40px rgba(255, 255, 255, 0.4);
+        }
+
+        /* ==========================================================================
+           3. DEVELOPER PROFILE SPLIT-VIEW
+           ========================================================================== */
+        .developer-profile-layout {
+            display: flex; width: 100%; height: 100%; align-items: stretch;
+        }
+
+        .profile-photo-side {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            padding: 2rem; border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-photo-side img { 
+            width: 100%; max-width: 400px; height: auto; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .profile-info-side { 
+            flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 3rem;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(11, 79, 97, 0.2);
+            color: #0b4f61;
+            padding: 0.6rem 1.4rem;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            width: fit-content;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover { background: #008ca6; color: #ffffff; transform: translateY(-2px); }
+
+        .profile-info-side h2 { font-size: 2.2rem; margin-bottom: 1rem; color: #0b4f61; }
+        
+        /* Justified text alignment */
+        .profile-info-side p { 
+            font-size: 1.15rem; 
+            line-height: 1.6; 
+            color: #38616c; 
+            margin-bottom: 1.5rem; 
+            text-align: justify; 
+        }
+
+        /* ==========================================================================
+           4. HOVER INTERACTIVE POPOVER
+           ========================================================================== */
+        .interactive-name-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .dev-name-highlight {
+            font-weight: 800;
+            color: #0b4f61;
+            border-bottom: 2px dashed #008ca6;
+            transition: color 0.3s ease;
+        }
+
+        .interactive-name-wrapper:hover .dev-name-highlight {
+            color: #008ca6;
+        }
+
+        .social-popover {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(11, 62, 77, 0.15);
+            display: flex;
+            gap: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
+        }
+
+        .interactive-name-wrapper:hover .social-popover {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .popover-link {
+            text-decoration: none;
+            color: #0b4f61;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .popover-link:hover {
+            color: #008ca6;
+            transform: translateY(-1px);
+        }
+
+        /* ==========================================================================
+           5. MEDIA SCALING RESPONSIVE ARCHITECTURE
+           ========================================================================== */
+        @media (max-width: 1024px) {
+            .developer-profile-layout { flex-direction: column; overflow-y: auto; }
+            .profile-photo-side { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+            .social-popover { left: 50%; transform: translateX(-50%) translateY(10px); }
+            .interactive-name-wrapper:hover .social-popover { transform: translateX(-50%) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <main class="main-content">
+        <div class="display-viewport">
+            <div class="developer-profile-layout">
+                <div class="profile-photo-side">
+                    <img src="your-photo.jpg" alt="Developer Photo">
+                </div>
+                <div class="profile-info-side">
+                    <button class="back-btn" onclick="window.location.href='index.html'">
+                        &larr; Back
+                    </button>
+                    <h2>The Developer</h2>
+                    <p>
+                        <span class="interactive-name-wrapper">
+                            <span class="dev-name-highlight">KATE ANN RAPHAELE A. TOTAÑES</span>
+                            <span class="social-popover">
+                                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=karat2023-6773-44553@bicol-u.edu.ph" target="_blank" class="popover-link">✉️ Email</a>
+                                <a href="https://www.facebook.com/kate.totanes.2024/about" target="_blank" class="popover-link">🌐 Facebook</a>
+                            </span>
+                        </span><br>
+                        BS Civil Engineering | Block C<br>
+                        
+                    </p>
+                    
+                    <h2>The Website</h2>
+                    <p>This website is a simple, centralized hub of compiled math notes and formulas specifically for Correlation 1 review. Developed as a course requirement for the class of Engr. Neil Jon P. Lotivio, the website's format was directly inspired by his own board exam review strategy of using index-card flashcards. The core philosophy is to eliminate the time-consuming chore of handwriting notes, allowing students to save their energy and focus entirely on actual studying.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

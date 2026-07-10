@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correlation 1 Review</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="desk-prop pencil-orange"></div>
+        <div class="desk-prop pencil-yellow"></div>
+        <div class="desk-prop pink-set-square"></div>
+        <div class="desk-prop plastic-widget"></div>
+        <div class="desk-prop sharpener-box"></div>
+        <div class="desk-prop green-blocks"></div>
+
+        <div class="splash-content">
+            <h1 class="tactile-title">MSTC</h1>
+            
+            <p class="tactile-subtitle">FORMULAE & NOTES</p>
+            
+            <button id="start-btn" class="pill-start-btn">Start Reviewing</button>
+        </div>
+    </div>
+
+    <div class="dashboard-container" id="main-dashboard">
+        <main class="main-content">
+            
+            <header class="dashboard-header">
+                <div class="header-title-row" style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 20px; flex-wrap: wrap;">
+                    
+                    <div class="title-side-emphasis-container" style="display: flex; align-items: center; gap: 25px; flex: 1; min-width: 320px; position: relative;">
+                        
+                        <div id="fairytale-title-wrapper" style="position: relative; display: inline-block;">
+                            <h1 class="premium-cursive-title" style="
+                                font-family: 'Dancing Script', 'Brush Script MT', 'Great Vibes', cursive;
+                                font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+                                font-style: normal;
+                                text-transform: none;
+                                margin: 0;
+                                padding: 5px 0;
+                                white-space: nowrap;
+                                background: linear-gradient(75deg, #ffffff 0%, #e2e8f0 25%, #ffffff 50%, #e2e8f0 75%, #ffffff 100%);
+                                background-size: 200% auto;
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                                filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.4));
+                                opacity: 0;
+                            ">
+                                Correlation 1
+                            </h1>
+
+                            <div class="fairy-butterfly bf-one" style="
+                                position: absolute;
+                                width: 8px;
+                                height: 8px;
+                                background: #ffffff;
+                                border-radius: 50%;
+                                box-shadow: 0 0 10px 2px #ffffff, 0 0 20px #e2e8f0;
+                                opacity: 0;
+                            ">
+                                <div style="position: absolute; width: 6px; height: 6px; background: rgba(255,255,255,0.6); border-radius: 50% 50% 0 50%; top: -4px; left: -2px; transform-origin: bottom right; animation: flap 0.15s ease-in-out infinite alternate;"></div>
+                                <div style="position: absolute; width: 6px; height: 6px; background: rgba(255,255,255,0.6); border-radius: 50% 50% 50% 0; top: -4px; right: -2px; transform-origin: bottom left; animation: flap 0.15s ease-in-out infinite alternate-reverse;"></div>
+                            </div>
+
+                            <div class="fairy-butterfly bf-two" style="
+                                position: absolute;
+                                width: 6px;
+                                height: 6px;
+                                background: #e2e8f0;
+                                border-radius: 50%;
+                                box-shadow: 0 0 8px 1px #ffffff;
+                                opacity: 0;
+                            ">
+                                <div style="position: absolute; width: 4px; height: 4px; background: rgba(255,255,255,0.7); border-radius: 50% 50% 0 50%; top: -3px; left: -1px; transform-origin: bottom right; animation: flap 0.12s ease-in-out infinite alternate;"></div>
+                                <div style="position: absolute; width: 4px; height: 4px; background: rgba(255,255,255,0.7); border-radius: 50% 50% 50% 0; top: -3px; right: -1px; transform-origin: bottom left; animation: flap 0.12s ease-in-out infinite alternate-reverse;"></div>
+                            </div>
+
+                            <div class="glitter-dust gd-1" style="position: absolute; width: 3px; height: 3px; background: #fff; box-shadow: 0 0 6px #fff; top: 40%; left: 20%; opacity: 0;"></div>
+                            <div class="glitter-dust gd-2" style="position: absolute; width: 2px; height: 2px; background: #fff; box-shadow: 0 0 4px #fff; top: 60%; left: 50%; opacity: 0;"></div>
+                            <div class="glitter-dust gd-3" style="position: absolute; width: 3px; height: 3px; background: #fff; box-shadow: 0 0 6px #fff; top: 30%; left: 80%; opacity: 0;"></div>
+                        </div>
+                        
+                        <div class="title-accent-architecture" style="display: flex; align-items: center; gap: 12px; flex: 1; margin-top: 12px;">
+                            <div style="height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,0.01)); flex: 1; max-width: 350px;"></div>
+                            <div style="width: 4px; height: 4px; background: #ffffff; border-radius: 50%; opacity: 0.4; box-shadow: 0 0 6px #ffffff;"></div>
+                        </div>
+                    </div>
+                    
+                    <button id="home-btn" class="header-home-btn" title="Return to Title Screen">
+                        <span class="home-icon">🏠</span> Home
+                    </button>
+                </div>
+                
+                <div style="max-width: max-content; width: 100%; overflow: hidden;">
+                    <p style="
+                        margin: 12px 0 0 0;
+                        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+                        font-size: clamp(0.6rem, 1.1vw, 0.8rem);
+                        color: #94a3b8;
+                        letter-spacing: 1px;
+                        line-height: 1.4;
+                        text-transform: uppercase;
+                        overflow: hidden;
+                        white-space: nowrap;
+                    ">MSTC (APPLIED MATHEMATICS, SURVEYING, PRINCIPLES OF TRANSPORTATION AND HIGHWAY ENGINEERING, CONSTRUCTION MANAGEMENT AND METHODS)</p>
+                </div>
+
+                <style>
+                    @keyframes silverGleam {
+                        0% { background-position: 0% center; }
+                        100% { background-position: 200% center; }
+                    }
+
+                    @keyframes flap {
+                        0% { transform: scaleX(0.2) rotate(-10deg); }
+                        100% { transform: scaleX(1) rotate(10deg); }
+                    }
+
+                    /* When animate-active state triggers */
+                    #fairytale-title-wrapper.animate-active h1 {
+                        animation: silverGleam 5s linear infinite, titleRevealOnce 2.5s ease-out forwards;
+                    }
+
+                    #fairytale-title-wrapper.animate-active .bf-one {
+                        animation: butterflyFlightOne 6s ease-in-out forwards;
+                    }
+
+                    #fairytale-title-wrapper.animate-active .bf-two {
+                        animation: butterflyFlightTwo 6s ease-in-out forwards;
+                    }
+
+                    #fairytale-title-wrapper.animate-active .gd-1 { animation: dustFade 3s infinite; }
+                    #fairytale-title-wrapper.animate-active .gd-2 { animation: dustFade 3s infinite 0.4s; }
+                    #fairytale-title-wrapper.animate-active .gd-3 { animation: dustFade 3s infinite 0.8s; }
+
+                    /* Text reveals softly, then retains 100% visibility permanently */
+                    @keyframes titleRevealOnce {
+                        0% { opacity: 0; filter: blur(4px); }
+                        100% { opacity: 1; filter: blur(0px); }
+                    }
+
+                    @keyframes dustFade {
+                        0%, 100% { opacity: 0; transform: scale(0); }
+                        50% { opacity: 1; transform: scale(1.2); }
+                    }
+
+                    /* Butterfly 1 flight path: flies across, lands, flashes, then cleanly fades out */
+                    @keyframes butterflyFlightOne {
+                        0% { top: 80%; left: -10%; opacity: 0; transform: scale(0.6); }
+                        15% { opacity: 1; transform: scale(1); }
+                        28% { top: 10%; left: 30%; }
+                        45% { top: 60%; left: 65%; }
+                        58% { top: 10%; left: 95%; opacity: 1; box-shadow: 0 0 12px 3px #ffffff; transform: scale(1.2) rotate(45deg); }
+                        82% { top: 10%; left: 95%; opacity: 1; box-shadow: 0 0 18px 5px #ffffff; transform: scale(1.4) rotate(45deg); }
+                        92%, 100% { top: 10%; left: 95%; opacity: 0; transform: scale(0) rotate(45deg); }
+                    }
+
+                    /* Butterfly 2 flight path: mirrors, sweeps off screen, and vanishes */
+                    @keyframes butterflyFlightTwo {
+                        0% { top: 10%; left: 110%; opacity: 0; transform: scale(0.5); }
+                        12% { opacity: 1; transform: scale(0.9); }
+                        30% { top: 75%; left: 70%; }
+                        48% { top: 20%; left: 25%; }
+                        60% { top: 90%; left: -5%; opacity: 0.8; }
+                        72%, 100% { top: 100%; left: -20%; opacity: 0; }
+                    }
+                </style>
+            </header>
+
+            <div class="interactive-stage">
+                
+                <div class="category-menu">
+                    <div class="menu-buttons-stack">
+                        <button class="menu-btn active" data-target="algebra" data-url="algebra.html">
+                            <span class="btn-icon">🧮</span> Algebra
+                        </button>
+                        <button class="menu-btn" data-target="plane-trig" data-url="plane-trig.html">
+                            <span class="btn-icon">📐</span> Trigonometry
+                        </button>
+                        <button class="menu-btn" data-target="geometry" data-url="geometry.html">
+                            <span class="btn-icon">📦</span> Plane & Solid Geometry
+                        </button>
+                        <button class="menu-btn" data-target="analytic-geo" data-url="analytic-geo.html">
+                            <span class="btn-icon">📈</span> Analytic Geometry
+                        </button>
+                        <button class="menu-btn" data-target="diff-calc" data-url="differential-calc.html">
+                            <span class="btn-icon">⚡</span> Calculus
+                        </button>
+                        <button class="menu-btn" data-target="int-calc" data-url="integral-calc.html">
+                            <span class="btn-icon">🙋🏼‍♀️</span> About
+                        </button>
+                    </div>
+                </div>
+
+                <div class="display-viewport">
+                    
+                    <div class="slide active" id="algebra">
+                        <div class="slide-glow bg-algebra"></div>
+                        <div class="slide-content">
+                            <span class="module-badge">MODULE 01</span>
+                            <h2>Algebra</h2>
+                            <p>* Basic Math</p>
+                            <p>* Series and Sequences</p>
+                            <p>* Word Problems I and II</p>
+                            <p>* Fundamental Principles of Counting</p>
+                            <p>* Other Formulae</p>
+                        </div>
+                    </div>
+
+                    <div class="slide" id="plane-trig">
+                        <div class="slide-glow bg-trig"></div>
+                        <div class="slide-content">
+                            <span class="module-badge">MODULE 02</span>
+                            <h2>Plane and Spherical Trigonometry</h2>
+                            <p>* Angle of Measurements</p>
+                            <p>* Pythagorean Relations</p>
+                            <p>* Identities</p>
+                            <p>* Law of Sine and Cosine </p>
+                            <p>* Area of Triangle</p>
+                            <p>* Sinusoidal Waves</p>
+                            <p>* Spherical Excess and Defect</p>
+                            <p>* Right Spherical Triangle (Napier's Rule)</p>
+                            <p>* Oblique Spherical Triangle</p>
+                            <p>* Area and Volume of Spherical Triangle</p>
+                        </div>
+                    </div>
+
+                    <div class="slide" id="geometry">
+                        <div class="slide-glow bg-geometry"></div>
+                        <div class="slide-content">
+                            <span class="module-badge">MODULE 03</span>
+                            <h2>Plane & Solid Geometry</h2>
+                            <p>* General Polygon</p>
+                            <p>* Triangles</p>
+                            <p>* Quadrilaterals</p>
+                            <p>* Circles</p>
+                            <p>* Polyhedrons</p>
+                            <p>* Sphere</p>
+                            <p>* Platonic Solids</p>
+                        </div>
+                    </div>
+
+                    <div class="slide" id="analytic-geo">
+                        <div class="slide-glow bg-analytic"></div>
+                        <div class="slide-content">
+                            <span class="module-badge">MODULE 04</span>
+                            <h2>Analytic Geometry</h2>
+                            <p>* Lines</p>
+                            <p>* Conic Sections</p>
+                            <p>* Polar Coordinate System</p>
+                        </div>
+                    </div>
+
+                    <div class="slide" id="diff-calc">
+                        <div class="slide-glow bg-diff"></div>
+                        <div class="slide-content">
+                            <span class="module-badge">MODULE 05</span>
+                            <h2>Differential and Integral Calculus</h2>
+                            <p>* Rate of Change</p>
+                            <p>* Maxima and Minima</p>
+                            <p>* Point of Inflection</p>
+                            <p>* Other Formulae</p>
+                            <p>* Integration by Parts</p>
+                            <p>* Plane Areas (Rectangular Coordinates)</p>
+                            <p>* Plane Areas (Polar Coordinates)</p>
+                        </div>
+                    </div>
+
+                    <div class="slide" id="int-calc">
+                        <div class="slide-glow bg-integral"></div>
+                        <div class="slide-content">
+                            <h2>About</h2>
+                            <p>Discover the board exam review strategy that inspired this entire matrix, and connect directly with the developer behind the code and send feedback —simply hover your cursor over the developer's name to reveal contact options.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
