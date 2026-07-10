@@ -543,28 +543,4 @@ body {
     100% { transform: translate(-40px, 40px) scale(1.15); opacity: 0.45; }
 }
 
-/* ==========================================================================
-   MEDIA SCALING RESPONSIVE ARCHITECTURE
-   ========================================================================== */
-@media (max-width: 1024px) {
-    .main-content { padding: 2rem; }
-    .interactive-stage { flex-direction: column; gap: 1.5rem; }
-    .category-menu { width: 100%; height: auto; }
-    .display-viewport { min-height: 320px; }
-    .header-home-btn { position: absolute; right: 0; top: 0; }
-    body { overflow-y: auto; }
-}
 
-/* This tells the phone to adjust based on screen width */
-@media only screen and (max-width: 600px) {
-  /* Change things here for mobile */
-  body {
-    padding: 10px;
-  }
-
-  /* Example: If you have a class called 'column', stack them */
-  .column {
-    width: 100% !important;
-    display: block;
-  }
-}
